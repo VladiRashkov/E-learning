@@ -8,13 +8,16 @@ def all():
     data = query.table('users').select('*').execute()
     return data
 
-def new_user(username:str, password:str):
-    data = query.table('users').select('*').eq('email', username).execute()
+def new_user(email:str, password:str):
+    
+    # if '@' not in username:
+    #     return 'Please enter a valid email address!'
+    data = query.table('users').select('*').eq('email', email).execute()
     
     if data == []:
         return None
     else:
-        new_registration = query.table('users').insert({'email':username, 'password':password}).execute()
+        new_registration = query.table('users').insert({'email':email, 'password':password}).execute()
         return new_registration
     
 def completed_account(email:str, first_name:str, last_name:str, photo:str, role:str, phone_number:str, linkedin_account:str):

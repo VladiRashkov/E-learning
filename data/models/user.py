@@ -1,13 +1,12 @@
 from pydantic import BaseModel, constr, EmailStr, field_validator
 from typing import Optional
 from enum import Enum
+from fastapi import HTTPException, status
 
 class UserRole(str, Enum):
     student = 'student'
     teacher = 'teacher'
     admin = 'admin'
-
-TUsername = constr(pattern=r'^\w{2,30}$')
 
 class User(BaseModel):
     id: Optional[int] = None
@@ -35,9 +34,10 @@ class User(BaseModel):
 
 
 class LoginData(BaseModel):
-    username: TUsername
+    email: str
     password: str
     
+
     
 class UpdateUserData(BaseModel):
     first_name:Optional[str]
