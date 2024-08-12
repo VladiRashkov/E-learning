@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Response, status, HTTPException, Header
-from data.models.user import LoginData
-from services.users_services import all, new_user
+from data.models.user import LoginData, UpdateUserData
+from services.users_services import all, new_user, completed_account
 from fastapi.requests import Request
 
 
@@ -22,3 +22,16 @@ def create_user(user_reg:LoginData, response:Response):
     else:
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {'message': f'Username{user_reg.username} is taken!'}   
+
+@users_router.put('/update_user/{email}')
+def update_user(email:str, user_data:UpdateUserData, response:Response):
+    completed_account(email=email,  
+        first_name=user_data.first_name,
+        last_name=user_data.last_name,
+        photo=user_data.photo,
+        role=user_data.role,
+        phone_number=user_data.phone_number,
+        linkedin_account=user_data.linkedin_account
+        )
+    
+    return f'User with email address {email} has completed their profile'

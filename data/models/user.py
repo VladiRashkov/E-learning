@@ -37,3 +37,18 @@ class User(BaseModel):
 class LoginData(BaseModel):
     username: TUsername
     password: str
+    
+    
+class UpdateUserData(BaseModel):
+    first_name:Optional[str]
+    last_name:Optional[str]
+    photo:Optional[str]
+    role:Optional[str]
+    phone_number:Optional[str]
+    linkedin_account:Optional[str]
+    
+    @field_validator('role')
+    def normalize_role(cls, v):
+        if v:
+            return v.lower()  # Convert the role to lowercase before processing
+        return v
