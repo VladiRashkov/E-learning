@@ -8,9 +8,9 @@ def all():
     return data
 
 def new_user(username:str, password:str):
-    data = query.table('users').select('email').execute()
+    data = query.table('users').select('*').eq('email', username).execute()
     
-    if data:
+    if data == []:
         return None
     else:
         new_registration = query.table('users').insert({'email':username, 'password':password}).execute()

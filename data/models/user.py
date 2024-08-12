@@ -7,7 +7,7 @@ class UserRole(str, Enum):
     teacher = 'teacher'
     admin = 'admin'
 
-TUsername = constr(pattern='^\\w{2,30}$')
+TUsername = constr(pattern=r'^\w{2,30}$')
 
 class User(BaseModel):
     id: Optional[int] = None
