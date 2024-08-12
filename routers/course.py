@@ -7,7 +7,7 @@ course_router = APIRouter(prefix='/courses', tags=['courses'])
 
 @course_router.get('/')
 def get_courses():
-    courses = all
+    courses = all()
     return courses
 
 

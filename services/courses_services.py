@@ -1,6 +1,5 @@
 from data.database import query
 
-
 def all():
     data = query.table('courses').select('*').execute()
     return data
