@@ -1,8 +1,11 @@
-from fastapi import APIRouter, Response, status, HTTPException, Header
+from fastapi import APIRouter, Response, status, HTTPException, Header, Depends
 from data.models.user import LoginData, UpdateUserData
-from services.users_services import all, new_user, completed_account
+from services.users_services import all, new_user, completed_account, get_user_by_id, verify_user_credentials
 from fastapi.requests import Request
 import re
+from common.auth import create_token, get_current_user, verify_access_token, logout_user, bearer_scheme
+from fastapi.security import HTTPAuthorizationCredentials
+
 
 users_router = APIRouter(prefix='/users', tags = ['users'])
 
@@ -43,3 +46,19 @@ def update_user(email:str, user_data:UpdateUserData, response:Response):
         )
     
     return f'User with email address {email} has completed their profile'
+
+
+@users_router.post('/login')
+def login(data: LoginData, response: Response):
+    user = verify_user_credentials(data.email, data.password)
+
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+
+    token = create_token(user.id)
+    return {"access_token": token, "token_type": "bearer"}
+
+@users_router.post('/logout')
+def logout(token: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+    return logout_user(token)
+

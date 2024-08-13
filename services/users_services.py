@@ -1,6 +1,6 @@
-
 from data.database import query
 from fastapi import HTTPException, status
+import bcrypt
 
 
 
@@ -33,3 +33,31 @@ def completed_account(email:str, first_name:str, last_name:str, photo:str, role:
                                                     'linkedin_account':linkedin_account}).eq('email', email).execute()
     
         return details_user
+    
+    
+def get_user_by_id(user_id:int):
+    result = query.table('users').select('*').eq('user_id',user_id).execute()
+    return result
+
+
+def verify_user_credentials(email: str, password: str):
+    try:
+       
+        user = query.table('users').select('*').eq('email', email).execute()
+        user_list = user.data
+        if not user_list:
+            
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
+
+        # Assuming `user` is a list and we are interested in the first user
+        user = user_list[0]
+
+        # Verify the password
+        if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+            return user
+        else:
+            # Raise an exception if password does not match
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
+    
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
