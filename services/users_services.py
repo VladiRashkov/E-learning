@@ -49,14 +49,14 @@ def verify_user_credentials(email: str, password: str):
             
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
 
-        # Assuming `user` is a list and we are interested in the first user
+      
         user = user_list[0]
 
-        # Verify the password
+        
         if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
             return user
         else:
-            # Raise an exception if password does not match
+           
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
     
     except Exception as e:
