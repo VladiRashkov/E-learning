@@ -5,10 +5,15 @@ from data.schemas import CreateCourse
 
 course_router = APIRouter(prefix='/courses', tags=['courses'])
 
+
+# view by anybody
 @course_router.get('/')
 def get_courses():
     courses = all()
     return courses
+
+
+
 
 
 @course_router.post('new_course')

@@ -3,21 +3,30 @@ from fastapi import HTTPException, status
 import bcrypt
 
 
-
 def all():
     data = query.table('users').select('*').execute()
+    
     return data
 
+def hash_password(plain_password: str) -> str:
+    
+    salt = bcrypt.gensalt()
+
+    
+    hashed_password = bcrypt.hashpw(plain_password.encode('utf-8'), salt)
+
+    
+    return hashed_password.decode('utf-8')
+
+
 def new_user(email:str, password:str):
-    
-    # if '@' not in username:
-    #     return 'Please enter a valid email address!'
+ 
     data = query.table('users').select('*').eq('email', email).execute()
-    
+    hashed_password = hash_password(password)
     if data == []:
         return None
     else:
-        new_registration = query.table('users').insert({'email':email, 'password':password}).execute()
+        new_registration = query.table('users').insert({'email':email, 'password':hashed_password}).execute()
         return new_registration
     
 def completed_account(email:str, first_name:str, last_name:str, photo:str, role:str, phone_number:str, linkedin_account:str):

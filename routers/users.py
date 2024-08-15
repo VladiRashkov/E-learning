@@ -6,7 +6,6 @@ import re
 from common.auth import create_token, get_current_user, verify_access_token, logout_user, bearer_scheme
 from fastapi.security import HTTPAuthorizationCredentials
 
-
 users_router = APIRouter(prefix='/users', tags = ['users'])
 
 
@@ -26,6 +25,7 @@ def create_user(user_reg:LoginData, response:Response):
     if not bool(re.match(pass_pattern,user_reg.password)):
         return {'message': 'Password must be at least 8 characters long, include upper and lower case letters, a number, and a special character.'}
     
+   
     user = new_user(user_reg.email, user_reg.password)
     
     if user:
@@ -55,10 +55,18 @@ def login(data: LoginData, response: Response):
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
 
-    token = create_token(user.id)
+    user_id = user['user_id']
+    token = create_token(user_id)
     return {"access_token": token, "token_type": "bearer"}
 
 @users_router.post('/logout')
 def logout(token: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
     return logout_user(token)
 
+
+
+
+
+# Students must be able to view available courses 
+# and access their content depending on whether the courses are 
+# public or premium and/or they have subscribed for them or not.

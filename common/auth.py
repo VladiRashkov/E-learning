@@ -4,6 +4,7 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from services.users_services import get_user_by_id
 from pydantic import BaseModel
+import bcrypt
 
 SECRET_KEY = 'supersecretkey'
 ALGORITHM = 'HS256'
@@ -55,5 +56,5 @@ def logout_user(token: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
 
 
 
-    
+
     

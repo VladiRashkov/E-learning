@@ -10,3 +10,5 @@ def make_course(title:str, description:str, home_page_picture:str, is_premium:bo
                                    'home_page_picture':home_page_picture, 'is_premium':is_premium,
                                    'rating':rating, 'objectives': objectives}).execute()
     return insert_course
+
+
