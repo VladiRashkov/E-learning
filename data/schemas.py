@@ -8,3 +8,5 @@ class CreateCourse(BaseModel):
     is_premium:bool = False
     rating: float
     objectives:str
+    
+

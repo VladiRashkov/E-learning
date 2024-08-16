@@ -1,5 +1,6 @@
 from pydantic import BaseModel, condecimal
 from typing import Optional
+from datetime import datetime
 
 class AdminAction(BaseModel):
     action_id: Optional[int] = None
@@ -20,3 +21,9 @@ class AdminAction(BaseModel):
                    target_id=target_id,
                    timestamp=timestamp
                    )
+
+class RoleChangeRequest(BaseModel):
+    email: str
+    requested_role: str
+    status: str = 'pending'
+    requested_at: datetime = datetime.now

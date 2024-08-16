@@ -2,7 +2,7 @@ from data.database import query
 from fastapi import HTTPException, status
 
 
-
+#admin or teacher confirmation to be implemented
 def enroll_in_course(user_id:int, course_id:int):
     user_to_be_enrolled = query.table('users').select('*').eq('user_id',user_id).execute()
     user_list = user_to_be_enrolled.data
