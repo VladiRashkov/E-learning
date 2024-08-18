@@ -41,21 +41,19 @@ def approve_role_change_request(request_id:int):
     query.table('users').update({'role': 'teacher'}).eq('user_id', user_id).execute()
 
     return 'User added as teacher'
-   #
-   # query.table('role_change_requests').delete('*').eq('status','approved').execute()
+ 
     
     
 def reject_role_change_request(request_id:int):
     request = query.table('role_change_requests').select('*').eq('status','pending').execute()
-    
     if not request:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail='Role change request not found.'
         )
         
-        
-    request_data = request.data
-    
-    
-    request_data['status'] = 'rejected'
+    user_id = request.data[0]['user_id']
+    query.table('role_change_requests').update({'status': 'rejected'}).eq('id', request_id).execute()
+    query.table('users').update({'role': 'student'}).eq('user_id', user_id).execute()
+
+    return 'User was denied "teacher" account. User added as student.'

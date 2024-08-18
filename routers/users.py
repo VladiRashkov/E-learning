@@ -50,20 +50,29 @@ def update_user(email:str, user_data:UpdateUserData, response:Response, current_
         )
         
     
-    # if user_data.role:
-    #     role = user_data.role.lower()
+    if user_data.role:
+        role = user_data.role.lower()
         
-    #     if role not in ['teacher', 'student']:
-    #         raise HTTPException(
-    #             status_code=status.HTTP_400_BAD_REQUEST,
-    #             detail="Invalid role.Only 'teacher' or 'student' roles are allowed."
-    #         )
+        if role not in ['teacher', 'student']:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid role.Only 'teacher' or 'student' roles are allowed."
+            )
             
-    #     if role == 'teacher':
-    #         save_role_change_request(email=email, requested_role=role)
-    #         return{
-    #             'message':'Role "teacher" requires admin authorization. Your request has been submitted.'
-    #         }
+        if role == 'teacher':
+            completed_account(email=email,  
+            first_name=user_data.first_name,
+            last_name=user_data.last_name,
+            photo=user_data.photo,
+            role=None,
+            phone_number=user_data.phone_number,
+            linkedin_account=user_data.linkedin_account
+            )
+    
+            save_role_change_request(email=email, requested_role=role)
+            return{
+                'message':'Role "teacher" requires admin authorization. Your request has been submitted.'
+            }
     
     completed_account(email=email,  
         first_name=user_data.first_name,
