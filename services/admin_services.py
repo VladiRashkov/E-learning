@@ -57,3 +57,17 @@ def reject_role_change_request(request_id:int):
     query.table('users').update({'role': 'student'}).eq('user_id', user_id).execute()
 
     return 'User was denied "teacher" account. User added as student.'
+
+
+def remove_role(email:str):
+    user_query = query.table('users').select('*').eq('email',email).execute()
+    if not user_query.data or len(user_query.data) == 0:
+        return False 
+    user = user_query.data[0]
+    
+    if user.get('role') != 'teacher':
+        return False  
+    
+    query.table('users').update({'role':'student'}).eq('email',email).execute()
+    
+    return True
