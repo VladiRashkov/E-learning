@@ -41,28 +41,29 @@ def create_user(user_reg:LoginData, response:Response):
 
 @users_router.put('/update_user/{email}')
 def update_user(email:str, user_data:UpdateUserData, response:Response, current_user:User = Depends(get_current_user)):
+    email_data = current_user['email']
     
-    if email != current_user.email:
+    if email != email_data:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You are not authorized to update this user's information."
         )
         
     
-    if user_data.role:
-        role = user_data.role.lower()
+    # if user_data.role:
+    #     role = user_data.role.lower()
         
-        if role not in ['teacher', 'student']:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid role.Only 'teacher' or 'student' roles are allowed."
-            )
+    #     if role not in ['teacher', 'student']:
+    #         raise HTTPException(
+    #             status_code=status.HTTP_400_BAD_REQUEST,
+    #             detail="Invalid role.Only 'teacher' or 'student' roles are allowed."
+    #         )
             
-        if role == 'teacher':
-            save_role_change_request(email=email, requested_role=role)
-            return{
-                'message':'Role "teacher" requires admin authorization. Your request has been submitted.'
-            }
+    #     if role == 'teacher':
+    #         save_role_change_request(email=email, requested_role=role)
+    #         return{
+    #             'message':'Role "teacher" requires admin authorization. Your request has been submitted.'
+    #         }
     
     completed_account(email=email,  
         first_name=user_data.first_name,

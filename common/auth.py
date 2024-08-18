@@ -43,10 +43,13 @@ def get_current_user(token: HTTPAuthorizationCredentials = Depends(bearer_scheme
     )
 
     user_id = verify_access_token(token, credentials_exception)
-    user = get_user_by_id(user_id)
+    user_response = get_user_by_id(user_id)
 
-    if user is None:
+    if not user_response.data or len(user_response.data) == 0:
         raise credentials_exception
+
+    
+    user = user_response.data[0]
 
     return user
 

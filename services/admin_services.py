@@ -9,9 +9,13 @@ from fastapi import HTTPException, status
 def save_role_change_request(email:str, requested_role: str):
     user_query = query.table('users').select('user_id').eq('email', email).execute()
     user_data = user_query.data
+    
+    if not user_data or len(user_data) == 0:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    
     user_id = user_data[0]['user_id']
     data = {
-        "user_id": user_query,
+        "user_id": user_id,
         "requested_role": requested_role,
         "status": "pending",
         "requested_at": datetime.now().isoformat()  # Format timestamp as ISO 8601
@@ -26,15 +30,19 @@ def get_role_change_requests():
     
 def approve_role_change_request(request_id:int):
     request = query.table('role_change_requests').select('*').eq('status','pending').execute()
-    
     if not request:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail='Role change request not found.'
         )
         
-    request_data = request.data
-    request_data['status'] = 'approved'
+    user_id = request.data[0]['user_id']
+    query.table('role_change_requests').update({'status': 'approved'}).eq('id', request_id).execute()
+    query.table('users').update({'role': 'teacher'}).eq('user_id', user_id).execute()
+
+    return 'User added as teacher'
+   #
+   # query.table('role_change_requests').delete('*').eq('status','approved').execute()
     
     
 def reject_role_change_request(request_id:int):
