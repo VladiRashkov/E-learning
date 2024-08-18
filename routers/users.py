@@ -28,17 +28,21 @@ def create_user(user_reg:LoginData, response:Response):
     
    
     user = new_user(user_reg.email, user_reg.password)
+
+    user_id = user.data[0]['user_id']
+    token = create_token(user_id)
+    
     
     if user:
-        return 'Registration completed!'
+        return 'Registration completed!', {"access_token": token, "token_type": "bearer"}
     else:
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {'message': f'Username{user_reg.email} is taken!'}   
 
 @users_router.put('/update_user/{email}')
-def update_user(email:str, user_data:UpdateUserData, response:Response,current_user:User = Depends(get_user_by_id)):
+def update_user(email:str, user_data:UpdateUserData, response:Response, current_user:User = Depends(get_current_user)):
     
-    if email != current_user(get_current_user):
+    if email != current_user.email:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You are not authorized to update this user's information."

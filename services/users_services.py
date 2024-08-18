@@ -8,6 +8,7 @@ def all():
     
     return data
 
+
 def hash_password(plain_password: str) -> str:
     
     salt = bcrypt.gensalt()
@@ -28,6 +29,7 @@ def new_user(email:str, password:str):
     else:
         new_registration = query.table('users').insert({'email':email, 'password':hashed_password}).execute()
         return new_registration
+    
     
 def completed_account(email:str, first_name:str, last_name:str, photo:str, role:str, phone_number:str, linkedin_account:str):
     find_user = query.table('users').select('*').eq('email',email).execute()
@@ -70,3 +72,4 @@ def verify_user_credentials(email: str, password: str):
     
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    

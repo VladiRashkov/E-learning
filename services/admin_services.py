@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 from data.database import query
 from data.models.admin import RoleChangeRequest
+from fastapi import HTTPException, status
 
 
 
@@ -19,4 +20,34 @@ def save_role_change_request(email:str, requested_role: str):
     result = query.table('role_change_requests').insert(data).execute()
     return result
     
+def get_role_change_requests():
+    return query.table('role_change_requests').select('*').eq('status','pending').execute()
 
+    
+def approve_role_change_request(request_id:int):
+    request = query.table('role_change_requests').select('*').eq('status','pending').execute()
+    
+    if not request:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Role change request not found.'
+        )
+        
+    request_data = request.data
+    request_data['status'] = 'approved'
+    
+    
+def reject_role_change_request(request_id:int):
+    request = query.table('role_change_requests').select('*').eq('status','pending').execute()
+    
+    if not request:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Role change request not found.'
+        )
+        
+        
+    request_data = request.data
+    
+    
+    request_data['status'] = 'rejected'
