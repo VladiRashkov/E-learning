@@ -13,9 +13,6 @@ def get_courses():
     courses = all()
     return courses
 
-
-
-
 #token to be implemented
 @course_router.post('new_course')
 def create_new_course(create_course:CreateCourse, current_user:User = Depends(get_current_user)):
@@ -44,3 +41,11 @@ def create_new_course(create_course:CreateCourse, current_user:User = Depends(ge
                          create_course.objectives)
     return result
 
+@course_router.put('/join_course')
+def participate(title:str, current_user: User = Depends(get_current_user)):
+    if not current_user.data or not isinstance(current_user.data, list) or len(current_user.data) == 0:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid user data"
+        )
+    

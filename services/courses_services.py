@@ -12,3 +12,7 @@ def make_course(title:str, description:str, home_page_picture:str, is_premium:bo
     return insert_course
 
 
+def request_to_participate(title:str):
+    course_details = query.table('courses').select('*').eq('title',title).execute()
+    
+    cousers_name = course_details.data[0]['title']
