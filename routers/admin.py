@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 from data.models.user import User
 from common.auth import get_current_user
-from services.admin_services import approve_role_change_request, reject_role_change_request, get_role_change_requests, remove_role
+from services.admin_services import approve_role_change_request, reject_role_change_request, get_role_change_requests, remove_role, tag_creation
 
 admin_router = APIRouter(prefix='/admin', tags=['admin'])
     
@@ -36,6 +36,7 @@ def approve_request(request_id: int, current_user: User = Depends(get_current_us
 def reject_request(request_id: int, current_user: User = Depends(get_current_user)):
     role = current_user['role']
     if role != "admin":
+        
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only admins can reject role change requests."
@@ -59,3 +60,17 @@ def remove_access(email:str, current_user: User = Depends(get_current_user)):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found or the user is not a teacher."
         )
+        
+        
+@admin_router.post('/tag')
+def create_tag(name:str, current_user: User = Depends(get_current_user)):
+    role = current_user['role']
+    if role != "admin":
+        
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only admins can reject role change requests."
+        )
+        
+    tag_creation(name)
+    return f'Tag {name} added '

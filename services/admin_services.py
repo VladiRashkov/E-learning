@@ -71,3 +71,11 @@ def remove_role(email:str):
     query.table('users').update({'role':'student'}).eq('email',email).execute()
     
     return True
+
+
+def tag_creation(name:str):
+    query.table('tags').insert({'name':name}).execute()
+    
+    return True
+    
+    
