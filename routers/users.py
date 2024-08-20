@@ -107,6 +107,3 @@ def logout(token: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
 
 
 
-# Students must be able to view available courses 
-# and access their content depending on whether the courses are 
-# public or premium and/or they have subscribed for them or not.
