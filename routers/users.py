@@ -53,11 +53,11 @@ def update_user(email:str, user_data:UpdateUserData, response:Response, current_
     if user_data.role:
         role = user_data.role.lower()
         
-        if role not in ['teacher', 'student']:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid role.Only 'teacher' or 'student' roles are allowed."
-            )
+        # if role not in ['teacher', 'student']:
+        #     raise HTTPException(
+        #         status_code=status.HTTP_400_BAD_REQUEST,
+        #         detail="Invalid role.Only 'teacher' or 'student' roles are allowed."
+        #     )
             
         if role == 'teacher':
             completed_account(email=email,  
@@ -98,12 +98,7 @@ def login(data: LoginData, response: Response):
     user_id = user['user_id']
     token = create_token(user_id)
     return {"access_token": token, "token_type": "bearer"}
-
+# erase the token
 @users_router.post('/logout')
 def logout(token: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
     return logout_user(token)
-
-
-
-
-
