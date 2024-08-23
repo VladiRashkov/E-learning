@@ -11,5 +11,4 @@ def new_section(course_id:int,title:str, content:str, description:str, external_
         'external_resource_link': external_resource_link
     }).execute()
     
-    
     return True
