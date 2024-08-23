@@ -73,3 +73,20 @@ def verify_user_credentials(email: str, password: str):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
+    
+def remove_from_course(email:str, title:str):
+    user = query.table('users').select('*').eq('email',email).execute()
+    student_id = user.data[0]['user_id']
+    
+    # course_involvment = query.table('enrollment').select('*').eq('student_id',student_id).execute()
+    # course_id = course_involvment.data[1]
+    course = query.table('courses').select('course_id').eq('title',title).execute()
+    course_id = course.data[0]['course_id']
+    query.table('enrollments').update({'is_subscribed': False}).eq('student_id', student_id).eq('course_id', course_id).execute()
+
+
+    # query.table('enrollment').update({'student_id':student_id, 'course_id':course_id, 'is_subscribed':False}).eq('course_id',course_id).execute()
+    
+    return True
+    
+    

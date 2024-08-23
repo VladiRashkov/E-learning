@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Response, status, HTTPException, Header, Depends
 from data.models.user import LoginData, UpdateUserData, User
-from services.users_services import all, new_user, completed_account, get_user_by_id, verify_user_credentials
+from services.users_services import all, new_user, completed_account, get_user_by_id, verify_user_credentials, remove_from_course
 from services.admin_services import save_role_change_request
 from fastapi.requests import Request
 import re
@@ -102,3 +102,8 @@ def login(data: LoginData, response: Response):
 @users_router.post('/logout')
 def logout(token: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
     return logout_user(token)
+
+@users_router.put('/unsubscribe')
+def unsubscribe_course(email:str, title:str):
+    remove_from_course(email, title)
+    return f'User removed from {title}!'

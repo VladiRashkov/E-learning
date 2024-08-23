@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, status
-from services.courses_services import all, make_course
+from services.courses_services import all, make_course, request_to_participate
 from data.models.user import User, UserRole
 from data.schemas import CreateCourse
 from common.auth import get_current_user
@@ -42,10 +42,13 @@ def create_new_course(create_course:CreateCourse, current_user:User = Depends(ge
     return result
 
 @course_router.put('/join_course')
-def participate(title:str, current_user: User = Depends(get_current_user)):
-    if not current_user.data or not isinstance(current_user.data, list) or len(current_user.data) == 0:
+def participate(title:str, user_id:int, current_user: User = Depends(get_current_user)):
+    user_id = current_user['user_id']
+    if not user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Invalid user data"
         )
+    request_to_participate(title, user_id)
+    return f'The user has been added to the course {title}'
     
