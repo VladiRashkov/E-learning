@@ -12,3 +12,10 @@ def new_section(course_id:int,title:str, content:str, description:str, external_
     }).execute()
     
     return True
+
+
+def all_sections_under_course(course_id:int):
+    
+    result =  query.table('sections').select('*').eq('course_id',course_id).execute()
+    
+    return result

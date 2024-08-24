@@ -3,9 +3,9 @@ from services.courses_services import all, make_course
 from data.models.user import User
 from data.models.section import Section
 from common.auth import get_current_user
-from services.section_services import new_section
+from services.section_services import new_section, all_sections_under_course
 
-section_router = APIRouter(prefix='/section', tags=['sections'])
+section_router = APIRouter(prefix='/sections', tags=['sections'])
 
 
 
@@ -19,4 +19,9 @@ def create_section(section:Section, current_user: User = Depends(get_current_use
             )
     result = new_section(section.course_id,section.content, section.description, section.external_resource_link)
     
+    return result
+
+@section_router.get('/')
+def get_all(course_id:int):
+    result = all_sections_under_course(course_id)
     return result
