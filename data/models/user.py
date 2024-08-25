@@ -1,7 +1,7 @@
 from pydantic import BaseModel, constr, EmailStr, field_validator
 from typing import Optional
 from enum import Enum
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Query
 
 class UserRole(str, Enum):
     student = 'student'
@@ -34,9 +34,16 @@ class User(BaseModel):
 
 
 class LoginData(BaseModel):
-    email: EmailStr
-    password: str
+    email: EmailStr = Query(..., example="", alias="email")
+    password: str = Query(..., example="", alias="password")
     
+    class Config:
+        schema_extra = {
+            "example": {
+                "email": "",
+                "password": ""
+            }
+        }
 
     
 class UpdateUserData(BaseModel):
