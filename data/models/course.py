@@ -28,3 +28,5 @@ class Course(BaseModel):
                    rating=rating,
                    owner_id=owner_id
                    )
+
+#
