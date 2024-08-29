@@ -59,3 +59,4 @@ class UpdateUserData(BaseModel):
         if v:
             return v.lower()  # Convert the role to lowercase before processing
         return v
+

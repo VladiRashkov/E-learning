@@ -1,12 +1,16 @@
 from fastapi import APIRouter, Response, status, HTTPException, Header, Depends
 from data.models.user import LoginData, UpdateUserData, User
-from services.users_services import all, new_user, completed_account, get_user_by_id, verify_user_credentials, remove_from_course
+from services.users_services import all, new_user, \
+completed_account, get_user_by_id, verify_user_credentials, \
+remove_from_course, changing_password, discover_user
 from services.admin_services import save_role_change_request
 from fastapi.requests import Request
 import re
 from common.auth import create_token, get_current_user, verify_access_token, logout_user, bearer_scheme
 from fastapi.security import HTTPAuthorizationCredentials
 from typing import Optional
+from data.schemas import ChangePassword
+
 users_router = APIRouter(prefix='/users', tags = ['users'])
 
 
@@ -103,3 +107,39 @@ def logout(token: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
 def unsubscribe_course(email:str, title:str):
     remove_from_course(email, title)
     return f'User removed from {title}!'
+
+
+
+@users_router.put('/update_existing_user')
+def modify(email:str, user_data:UpdateUserData, change_password:ChangePassword = None, current_user:User = Depends(get_current_user)):
+    email_data = current_user['email']
+    
+    if email != email_data:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not authorized to update this user's information."
+        )
+    
+    existing_user = discover_user(email)
+    
+    updated_user_data ={
+        "email": email,
+        "first_name": user_data.first_name or existing_user["first_name"],
+        "last_name": user_data.last_name or existing_user["last_name"],
+        "photo": user_data.photo or existing_user["photo"],
+        "role": user_data.role or existing_user["role"],
+        "phone_number": user_data.phone_number or existing_user["phone_number"],
+        "linkedin_account": user_data.linkedin_account or existing_user["linkedin_account"],
+    }
+        
+    completed_account(**updated_user_data)
+    
+    password = change_password.password
+    pass_pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+    if not bool(re.match(pass_pattern,password)):
+        return {'message': 'Password must be at least 8 characters long, include upper and lower case letters, a number, and a special character.'}
+    changing_password(new_password=password)
+    
+    return 'Password changed successfully'
+    
+    

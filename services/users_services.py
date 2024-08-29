@@ -89,4 +89,35 @@ def remove_from_course(email:str, title:str):
     
     return True
     
+def changing_password(email:str, password:str):
+    user = query.table('users').select('*').eq('email',email).execute()
+    
+    hashed_password = hash_password(password)
+    if user == []:
+        return None
+    else:
+        new_password = query.table('users').insert({'email':email, 'password':hashed_password}).execute()
+        
+        
+def discover_user(email: str):
+    response = query.table('users').select('*').eq('email', email).execute()
+    
+    # Check if the response contains data
+    if not response or not response.data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found."
+        )
+    
+    # Assuming the response has a 'data' attribute that contains the list of users
+    existing_user = response.data
+    
+    if not existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found."
+        )
+    
+    # Assuming existing_user is a list, and you want to access the first user's email
+    return existing_user[0]['email']
     
