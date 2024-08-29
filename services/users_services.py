@@ -96,8 +96,8 @@ def changing_password(email:str, password:str):
     if user == []:
         return None
     else:
-        new_password = query.table('users').insert({'email':email, 'password':hashed_password}).execute()
-        
+        query.table('users').update({'password':hashed_password}).eq('email', email).execute()
+        return True
         
 def discover_user(email: str):
     response = query.table('users').select('*').eq('email', email).execute()
@@ -119,5 +119,5 @@ def discover_user(email: str):
         )
     
     # Assuming existing_user is a list, and you want to access the first user's email
-    return existing_user[0]['email']
+    return existing_user
     

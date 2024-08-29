@@ -47,12 +47,12 @@ class LoginData(BaseModel):
 
     
 class UpdateUserData(BaseModel):
-    first_name:Optional[str]
-    last_name:Optional[str]
-    photo:Optional[str]
-    role:Optional[str]
-    phone_number:Optional[str]
-    linkedin_account:Optional[str]
+    first_name:Optional[str] = ''
+    last_name:Optional[str] = ''
+    photo:Optional[str] = ''
+    role:Optional[str] = ''
+    phone_number:Optional[str] = ''
+    linkedin_account:Optional[str] = ''
     
     @field_validator('role')
     def normalize_role(cls, v):

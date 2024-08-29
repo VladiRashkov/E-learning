@@ -122,24 +122,27 @@ def modify(email:str, user_data:UpdateUserData, change_password:ChangePassword =
     
     existing_user = discover_user(email)
     
-    updated_user_data ={
-        "email": email,
-        "first_name": user_data.first_name or existing_user["first_name"],
-        "last_name": user_data.last_name or existing_user["last_name"],
-        "photo": user_data.photo or existing_user["photo"],
-        "role": user_data.role or existing_user["role"],
-        "phone_number": user_data.phone_number or existing_user["phone_number"],
-        "linkedin_account": user_data.linkedin_account or existing_user["linkedin_account"],
-    }
+    updated_user_data = {
+    "email": email,
+    "first_name": user_data.first_name if user_data.first_name else existing_user[0]["first_name"],
+    "last_name": user_data.last_name if user_data.last_name else existing_user[0]["last_name"],
+    "photo": user_data.photo if user_data.photo else existing_user[0]["photo"],
+    "role": user_data.role if user_data.role else existing_user[0]["role"],
+    "phone_number": user_data.phone_number if user_data.phone_number else existing_user[0]["phone_number"],
+    "linkedin_account": user_data.linkedin_account if user_data.linkedin_account else existing_user[0]["linkedin_account"],
+}
         
     completed_account(**updated_user_data)
     
     password = change_password.password
+    
+    if password == 'string':
+        return {'message': 'Data updated'}
     pass_pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
     if not bool(re.match(pass_pattern,password)):
         return {'message': 'Password must be at least 8 characters long, include upper and lower case letters, a number, and a special character.'}
-    changing_password(new_password=password)
+    changing_password(email,password)
     
-    return 'Password changed successfully'
+    return {'message': 'Password changed. Data updated'}
     
     
