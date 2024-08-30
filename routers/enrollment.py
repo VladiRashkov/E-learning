@@ -15,7 +15,7 @@ def add_user_to_course(user_id:int, course_id: int):
     return f'User with user id: {user_id} added'
 
 
-@enroll_in_course.get('/courses/{email}')
+@enrollment_router.get('/courses/{email}')
 def show_course(email:str, current_user: User = Depends(get_current_user)):
     email_data = current_user['email']
     
