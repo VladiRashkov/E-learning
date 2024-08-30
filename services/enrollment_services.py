@@ -10,3 +10,19 @@ def enroll_in_course(user_id:int, course_id:int):
     
     result = query.table('enrollments').insert({'student_id':id, 'course_id':course_id, 'is_subscribed': True}).execute()
     return result
+
+
+def part_of_courses(email:str):
+    all_public = query.table('courses').select('*').eq('is_premium', False).execute()
+    
+    user = query.table('users').select('*').eq('email', email).execute()
+    
+    student_id = user[0]['student_id']
+    
+    enrolled = query.table('enrollments').select('*').eq('student_id', student_id).execute()
+    
+    courses_enrolled = enrolled[0]['course_id']
+    
+    subscribed = query.table('enrollments').select('*').eq('student_id',student_id, 'course_id', courses_enrolled ,'is_subscibed', True).execute()
+    
+    return all_public, subscribed
