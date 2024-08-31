@@ -56,8 +56,6 @@ def update_user(email:str, user_data:UpdateUserData, response:Response, current_
     
     if user_data.role:
         role = user_data.role.lower()
-        
-
             
         if role == 'teacher':
             completed_account(email=email,  
@@ -104,7 +102,16 @@ def logout(token: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
     return logout_user(token)
 
 @users_router.put('/unsubscribe')
-def unsubscribe_course(email:str, title:str):
+def unsubscribe_course(email:str, title:str, current_user:User = Depends(get_current_user)):
+    
+    email_data = current_user['email']
+    
+    if email != email_data:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not authorized to update this user's information."
+        )
+        
     remove_from_course(email, title)
     return f'User removed from {title}!'
 

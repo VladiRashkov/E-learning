@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 from data.models.user import User
 from common.auth import get_current_user
-from services.admin_services import approve_role_change_request, reject_role_change_request, get_role_change_requests, remove_role, tag_creation
+from services.admin_services import approve_role_change_request, reject_role_change_request,\
+    get_role_change_requests, remove_role, tag_creation, assign
 
 admin_router = APIRouter(prefix='/admin', tags=['admin'])
     
@@ -69,8 +70,20 @@ def create_tag(name:str, current_user: User = Depends(get_current_user)):
         
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only admins can reject role change requests."
+            detail="Only admins can create tags."
         )
         
     tag_creation(name)
     return f'Tag {name} added '
+
+@admin_router.post('assign_tag')
+def to_course(tag_name:str, course_name:str, current_user: User = Depends(get_current_user)):
+    role = current_user['role']
+    if role != "admin":
+        
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only admins can assign tags."
+        )
+        
+    assign(tag_name, course_name)

@@ -10,20 +10,16 @@ def all():
 
 
 def hash_password(plain_password: str) -> str:
-    
     salt = bcrypt.gensalt()
-
-    
     hashed_password = bcrypt.hashpw(plain_password.encode('utf-8'), salt)
-
     
     return hashed_password.decode('utf-8')
 
 
 def new_user(email:str, password:str):
- 
     data = query.table('users').select('*').eq('email', email).execute()
     hashed_password = hash_password(password)
+    
     if data == []:
         return None
     else:
@@ -53,21 +49,17 @@ def get_user_by_id(user_id:int):
 
 def verify_user_credentials(email: str, password: str):
     try:
-       
         user = query.table('users').select('*').eq('email', email).execute()
         user_list = user.data
         if not user_list:
-            
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
 
-      
         user = user_list[0]
 
         
         if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
             return user
         else:
-           
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
     
     except Exception as e:
