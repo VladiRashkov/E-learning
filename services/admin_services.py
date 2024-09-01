@@ -82,12 +82,12 @@ def assign(tag_name:str, course_name):
     
     tag_data = query.table('tags').select('*').eq('name',tag_name).execute()
     if tag_data.data:
-        tag_data_details = tag_data[0]
+        tag_data_details = tag_data.data[0]
         tag_id = tag_data_details['tag_id']
         
     course_data = query.table('courses').select('*').eq('title',course_name).execute()
     if course_data.data:
-        course_data_details = course_data[0]
+        course_data_details = course_data.data[0]
         course_id = course_data_details['course_id']
         
     query.table('coursetags').insert({'course_id':course_id, 'tag_id':tag_id}).execute()

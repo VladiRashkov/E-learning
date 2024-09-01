@@ -87,3 +87,5 @@ def to_course(tag_name:str, course_name:str, current_user: User = Depends(get_cu
         )
         
     assign(tag_name, course_name)
+    
+    return 'Tag assigned to course!'
