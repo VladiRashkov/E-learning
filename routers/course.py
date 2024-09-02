@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, status
-from services.courses_services import all, make_course, request_to_participate
+from services.courses_services import all, make_course, request_to_participate, update_course, discover_course
 from data.models.user import User, UserRole
-from data.schemas import CreateCourse
+from data.models.course import CreateCourse, UpdateCourse
 from common.auth import get_current_user
 
 course_router = APIRouter(prefix='/courses', tags=['courses'])
@@ -39,7 +39,33 @@ def create_new_course(create_course:CreateCourse, current_user:User = Depends(ge
                          create_course.is_premium,
                          create_course.rating,
                          create_course.objectives)
+    
     return result
+
+
+@course_router.put('/update')
+def modify(title: str, course_data: UpdateCourse, current_user: User = Depends(get_current_user)):
+    role = current_user['role']
+    if role != 'teacher':
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='Only teachers can create sections!'
+        )
+
+    existing_course = discover_course(title)
+
+    updated_course_data = {
+        "title": course_data.title if course_data.title else existing_course[0]["title"],
+        "description": course_data.description if course_data.description else existing_course[0]["description"],
+        "objectives": course_data.objectives if course_data.objectives else existing_course[0]["objectives"],
+        "home_page_picture": course_data.home_page_picture if course_data.home_page_picture else existing_course[0]["home_page_picture"],
+        "is_premium": course_data.is_premium if course_data.is_premium else existing_course[0]["is_premium"],
+        "rating": course_data.rating if course_data.rating else existing_course[0]["rating"],
+    }
+
+    update_course(**updated_course_data)
+
+    return {'message': 'Course data updated'}
 
 @course_router.put('/join_course')
 def participate(title:str, user_id:int, current_user: User = Depends(get_current_user)):

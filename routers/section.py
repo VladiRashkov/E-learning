@@ -25,3 +25,5 @@ def create_section(section:Section, current_user: User = Depends(get_current_use
 def get_all(course_id:int):
     result = all_sections_under_course(course_id)
     return result
+
+

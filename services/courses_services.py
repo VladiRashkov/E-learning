@@ -1,4 +1,5 @@
 from data.database import query
+from fastapi import HTTPException, status
 
 def all():
     data = query.table('courses').select('*').execute()
@@ -18,3 +19,42 @@ def request_to_participate(title:str, user_id: int):
     
     result = query.table('enrollments').insert({'student_id':user_id, 'course_id':course_id, 'is_subscribed': True}).execute()
     return True
+
+
+def update_course(title: str, description: str, home_page_picture: str, is_premium: bool, rating: float, objectives: str):
+    result = query.table('courses').select('*').eq('title', title).execute()
+
+    if not result:
+        return None
+    else:
+        details_course = query.table('courses').update({
+            'title': title,
+            'description': description,
+            'objectives': objectives,
+            'home_page_picture': home_page_picture,
+            'is_premium': is_premium,
+            'rating': rating
+        }).eq('title', title).execute()
+
+        return details_course
+    
+    
+def discover_course(title:str):
+    result = query.table('courses').select('*').eq('title',title).execute()
+    
+    if not result or not result.data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Course not found."
+        )
+   #EXTRACT THE COURSE ID SO YOU CAN USE IT AS AN ARGUMENT IN THE UPDATE COURSE ABOVE!!!!!!!!!!!!!!!     
+    existing_course = result.data
+
+    if not existing_course:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Section not found."
+        )
+    return existing_course
+
+#EXTRACT THE COURSE ID SO YOU CAN USE IT AS AN ARGUMENT IN THE UPDATE COURSE ABOVE!!!!!!!!!!!!!!!
