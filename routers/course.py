@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, status
-from services.courses_services import all, make_course, request_to_participate, update_course, discover_course
+from services.courses_services import all, make_course, request_to_participate, update_course, discover_course, find_course_by_tag
 from data.models.user import User, UserRole
 from data.models.course import CreateCourse, UpdateCourse
 from common.auth import get_current_user
@@ -79,3 +79,7 @@ def participate(title:str, user_id:int, current_user: User = Depends(get_current
     request_to_participate(title, user_id)
     return f'The user has been added to the course {title}'
     
+@course_router.get('/tag')
+def find_by_course(tag_name:str):
+    result = find_course_by_tag(tag_name)
+    return result

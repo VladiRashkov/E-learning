@@ -10,7 +10,6 @@ tags_router = APIRouter(prefix='/tags', tags = ['tags'])
 
 @tags_router.post('/new')
 def create_tag(name:str, user_data:User, current_user = Depends(get_current_user)):
-    
     # email_data = current_user['email']
     
     # if email != email_data:
@@ -27,10 +26,11 @@ def create_tag(name:str, user_data:User, current_user = Depends(get_current_user
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You are not authorized to update this user's information."
         )
-        
     create(name)
     
     return {'message':'Tag created'}
     
+    
+
     
     

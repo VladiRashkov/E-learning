@@ -12,8 +12,10 @@ def add_user_to_course(user_id:int, course_id: int, current_user: User = Depends
     role_data = current_user['role']
     
     if role_data != 'admin' or role_data != 'teacher':
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN
-                            detail='Only admins and teachers can add users to courses.')
+        raise HTTPException(
+                            status_code=status.HTTP_403_FORBIDDEN,
+                            detail='Only admins and teachers can add users to courses.'
+        )
     
     enroll_in_course(user_id, course_id)
     return f'User with user id: {user_id} added'

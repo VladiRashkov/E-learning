@@ -47,7 +47,6 @@ def discover_course(title:str):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Course not found."
         )
-   #EXTRACT THE COURSE ID SO YOU CAN USE IT AS AN ARGUMENT IN THE UPDATE COURSE ABOVE!!!!!!!!!!!!!!!     
     existing_course = result.data
 
     if not existing_course:
@@ -59,4 +58,25 @@ def discover_course(title:str):
         
     return existing_course
 
-#EXTRACT THE COURSE ID SO YOU CAN USE IT AS AN ARGUMENT IN THE UPDATE COURSE ABOVE!!!!!!!!!!!!!!!
+
+def find_course_by_tag(name:str):
+    tag_data = query.table('tags').select('*').eq('name',name).execute()
+    tag_data_list = tag_data.data
+    
+    if not tag_data_list:
+        return {"error": "Tag not found"}
+    
+    tag_id = tag_data_list[0]['tag_id']
+    coursetags_data = query.table('coursetags').select('*').eq('tag_id', tag_id).execute()
+    coursetags_data_list = coursetags_data.data
+    
+    if not coursetags_data_list:
+        return {"error": "No courses found for this tag"}
+    
+    course_id = coursetags_data_list[0]['course_id']
+    
+    # Fetching the actual course data using course_id
+    course_data = query.table('courses').select('*').eq('course_id', course_id).execute()
+    course_data_list = course_data.data
+    
+    return course_data_list
