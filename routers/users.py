@@ -120,6 +120,11 @@ def unsubscribe_course(email:str, title:str, current_user:User = Depends(get_cur
 @users_router.put('/update_existing_user')
 def modify(email:str, user_data:UpdateUserData, change_password:ChangePassword = None, current_user:User = Depends(get_current_user)):
     email_data = current_user['email']
+    # limit this to teachers and students, the admin can only change his password
+    role_data = current_user['role']
+    
+    if role_data == 'admin':
+        return 'As an admin you can change only '
     
     if email != email_data:
         raise HTTPException(

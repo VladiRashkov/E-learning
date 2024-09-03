@@ -24,7 +24,7 @@ def request_to_participate(title:str, user_id: int):
 def update_course(course_id:int, title: str, description: str, home_page_picture: str, is_premium: bool, rating: float, objectives: str):
     result = query.table('courses').select('*').eq('course_id', course_id).execute()
 
-    if not result:
+    if result==[]:
         return None
     else:
         details_course = query.table('courses').update({

@@ -14,7 +14,7 @@ def get_courses():
     return courses
 
 #token to be implemented
-@course_router.post('new_course')
+@course_router.post('/new_course')
 def create_new_course(create_course:CreateCourse, current_user:User = Depends(get_current_user)):
     if not current_user.data or not isinstance(current_user.data, list) or len(current_user.data) == 0:
         raise HTTPException(

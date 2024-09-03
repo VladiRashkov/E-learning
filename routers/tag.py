@@ -1,3 +1,4 @@
+
 from fastapi import APIRouter, Depends,HTTPException, status
 from data.models.tags import Tag
 from data.models.user import User
@@ -30,5 +31,6 @@ def create_tag(name:str, user_data:User, current_user = Depends(get_current_user
     create(name)
     
     return {'message':'Tag created'}
+    
     
     

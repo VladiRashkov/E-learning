@@ -3,15 +3,19 @@ from services.enrollment_services import enroll_in_course, part_of_courses
 from fastapi import Depends
 from data.models.user import User
 from common.auth import get_current_user
+
+
 enrollment_router = APIRouter(prefix='/enroll', tags=['enrollment'])
 
-
-
-# admin adds a user to premium to a specific course that the user will be able to access
-# needs admin token verication
 @enrollment_router.put('/add_user/{user_id}')
-def add_user_to_course(user_id:int, course_id: int):
-    result = enroll_in_course(user_id, course_id)
+def add_user_to_course(user_id:int, course_id: int, current_user: User = Depends(get_current_user)):
+    role_data = current_user['role']
+    
+    if role_data != 'admin' or role_data != 'teacher':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN
+                            detail='Only admins and teachers can add users to courses.')
+    
+    enroll_in_course(user_id, course_id)
     return f'User with user id: {user_id} added'
 
 
