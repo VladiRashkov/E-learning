@@ -55,6 +55,7 @@ def modify(title: str, course_data: UpdateCourse, current_user: User = Depends(g
     existing_course = discover_course(title)
 
     updated_course_data = {
+        "course_id":existing_course[0]["course_id"],
         "title": course_data.title if course_data.title else existing_course[0]["title"],
         "description": course_data.description if course_data.description else existing_course[0]["description"],
         "objectives": course_data.objectives if course_data.objectives else existing_course[0]["objectives"],

@@ -28,12 +28,12 @@ class CreateCourse(BaseModel):
 
 
 class UpdateCourse(BaseModel):
-    title: str
-    description: Optional[str]
-    home_page_picture: Optional[bytes]
+    title: str = ''
+    description: Optional[str] = ''
+    home_page_picture: Optional[str] = ''
     is_premium: bool = False
     rating: condecimal(max_digits=3, decimal_places=2) = 0.00
-    objectives: Optional[str]
+    objectives: Optional[str] = ''
     
     
     @classmethod

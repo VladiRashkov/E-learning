@@ -21,8 +21,8 @@ def request_to_participate(title:str, user_id: int):
     return True
 
 
-def update_course(title: str, description: str, home_page_picture: str, is_premium: bool, rating: float, objectives: str):
-    result = query.table('courses').select('*').eq('title', title).execute()
+def update_course(course_id:int, title: str, description: str, home_page_picture: str, is_premium: bool, rating: float, objectives: str):
+    result = query.table('courses').select('*').eq('course_id', course_id).execute()
 
     if not result:
         return None
@@ -33,8 +33,8 @@ def update_course(title: str, description: str, home_page_picture: str, is_premi
             'objectives': objectives,
             'home_page_picture': home_page_picture,
             'is_premium': is_premium,
-            'rating': rating
-        }).eq('title', title).execute()
+            'rating': rating,
+        }).eq('course_id', course_id).execute()
 
         return details_course
     
@@ -55,6 +55,8 @@ def discover_course(title:str):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Section not found."
         )
+        
+        
     return existing_course
 
 #EXTRACT THE COURSE ID SO YOU CAN USE IT AS AN ARGUMENT IN THE UPDATE COURSE ABOVE!!!!!!!!!!!!!!!
