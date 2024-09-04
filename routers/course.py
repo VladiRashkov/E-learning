@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, status
-from services.courses_services import all, make_course, request_to_participate, update_course, discover_course, find_course_by_tag, rate_course
+from services.courses_services import all, make_course, request_to_participate, \
+    update_course, discover_course, find_course_by_tag, rate_course, get_average_score
 from data.models.user import User, UserRole
 from data.models.course import CreateCourse, UpdateCourse
 from common.auth import get_current_user
@@ -99,3 +100,8 @@ def rate(email:str, score:float, course_name: str, current_user: User = Depends(
     result = rate_course(email, score, course_name)
     
     return {"message": "Rating submitted successfully", "result": result}
+
+@course_router.get('/average_score')
+def average_score(score_id:int):
+    result = get_average_score(score_id)
+    return f'Course average score {result:.2f} coresult'

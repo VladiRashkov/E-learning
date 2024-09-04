@@ -1,5 +1,6 @@
 from data.database import query
 from fastapi import HTTPException, status
+from functools import reduce
 
 def all():
     data = query.table('courses').select('*').execute()
@@ -107,3 +108,16 @@ def rate_course(email: str, score: float, course_name: str):
     
     return {"rating_id": rating_result.data[0]['rating_id'], "score": score}
     
+    
+def get_average_score(course_id:int):
+    list_data = query.table('ratings').select('*').eq('course_id',course_id).execute()
+    
+    if list_data==[]:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail='No review have been added to this course yet!')
+        
+    list_scores = [item['score'] for item in list_data.data]
+    len_list =len(list_scores)
+    average_score = reduce(lambda x,y: x+y, list_scores)/len_list
+    
+    return average_score
