@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, status
-from services.courses_services import all, make_course, request_to_participate, update_course, discover_course, find_course_by_tag
+from services.courses_services import all, make_course, request_to_participate, update_course, discover_course, find_course_by_tag, rate_course
 from data.models.user import User, UserRole
 from data.models.course import CreateCourse, UpdateCourse
 from common.auth import get_current_user
@@ -83,3 +83,19 @@ def participate(title:str, user_id:int, current_user: User = Depends(get_current
 def find_by_course(tag_name:str):
     result = find_course_by_tag(tag_name)
     return result
+
+
+@course_router.put('/rate')
+def rate(email:str, score:float, course_name: str, current_user: User = Depends(get_current_user)):
+    if score > 10:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail='The scode has to be between 0 and 10')
+    email_logged_user = current_user['email']
+    
+    if email != email_logged_user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail='Not authorized')
+    
+    result = rate_course(email, score, course_name)
+    
+    return {"message": "Rating submitted successfully", "result": result}

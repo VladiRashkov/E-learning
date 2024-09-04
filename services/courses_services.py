@@ -80,3 +80,30 @@ def find_course_by_tag(name:str):
     course_data_list = course_data.data
     
     return course_data_list
+
+#the course can be rated only if the user is enrolled in it - subscribed to the course
+def rate_course(email: str, score: float, course_name: str):
+    # Check if the user exists
+    user_details = query.table('users').select('*').eq('email', email).execute()
+    student_id = user_details.data[0]['user_id']
+    
+    # Check if the course exists
+    course_details = query.table('courses').select('*').eq('title', course_name).execute()
+    course_id = course_details.data[0]['course_id']
+    
+    # Check if the user is enrolled
+    enrollment_data = query.table('enrollments').select('*')\
+        .eq('student_id', student_id)\
+        .eq('course_id', course_id)\
+        .eq('is_subscribed', True).execute()
+    
+    if not enrollment_data.data:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail='Not enrolled in the course')
+    
+    # Insert the rating
+    rating_result = query.table('ratings').insert({'student_id': student_id,
+                                                   'course_id': course_id, 'score': score}).execute()
+    
+    return {"rating_id": rating_result.data[0]['rating_id'], "score": score}
+    
