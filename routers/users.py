@@ -96,7 +96,7 @@ def login(data: LoginData, response: Response):
     user_id = user['user_id']
     token = create_token(user_id)
     return {"access_token": token, "token_type": "bearer"}
-# erase the token
+# erase the token. It can be done only with java script
 @users_router.post('/logout')
 def logout(token: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
     return logout_user(token)
