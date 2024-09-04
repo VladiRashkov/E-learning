@@ -1,12 +1,27 @@
 from data.database import query
 from fastapi import HTTPException, status
 import bcrypt
+from data.models.user import User
 
 
 def all():
     data = query.table('users').select('*').execute()
-    return data
-
+    
+    users = [
+        User(
+            id=row['user_id'],  # Assuming 'user_id' is the key in the dictionary
+            email=row['email'],
+            first_name=row['first_name'],
+            last_name=row['last_name'],
+            password=row['password'],
+            photo=row['photo'],
+            role=row['role'],
+            phone_number=row['phone_number'],
+            linkedin_account=row['linkedin_account']
+        )
+        for row in data.data
+    ]
+    return users
 
 def hash_password(plain_password: str) -> str:
     salt = bcrypt.gensalt()

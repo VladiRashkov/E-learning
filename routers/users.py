@@ -10,14 +10,25 @@ from common.auth import create_token, get_current_user, verify_access_token, log
 from fastapi.security import HTTPAuthorizationCredentials
 from typing import Optional
 from data.schemas import ChangePassword
+from fastapi_pagination import Page, add_pagination, paginate
 
 users_router = APIRouter(prefix='/users', tags = ['users'])
 
 
-@users_router.get('/')
-def get_users(sort: str| None = None):
+@users_router.get('/', response_model=Page[User])
+async def get_users(current_user:User= Depends(get_current_user)):
+    role = current_user['role']
+    
+    if role != 'admin':
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not authorized to update this user's information."
+            )
+    
     users = all()
-    return users    
+    return paginate(users)
+
+add_pagination(users_router)
 
 @users_router.post('/new_account')
 def create_user(user_reg:LoginData, response:Response):
