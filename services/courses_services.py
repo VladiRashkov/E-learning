@@ -1,10 +1,41 @@
 from data.database import query
 from fastapi import HTTPException, status
 from functools import reduce
+from data.models.course import CreateCourse
 
 def all():
     data = query.table('courses').select('*').execute()
-    return data
+    
+    courses = [
+        CreateCourse(
+            title=row['title'],
+            description=row['description'],
+            home_page_picture=row['home_page_picture'],
+            is_premium = row['is_premium'],
+            rating= row['rating'],
+            objectives=row['objectives']
+        )
+        for row in data.data
+    ]
+    
+    return courses
+        
+    #  users = [
+    #     User(
+    #         id=row['user_id'],  # Assuming 'user_id' is the key in the dictionary
+    #         email=row['email'],
+    #         first_name=row['first_name'],
+    #         last_name=row['last_name'],
+    #         password=row['password'],
+    #         photo=row['photo'],
+    #         role=row['role'],
+    #         phone_number=row['phone_number'],
+    #         linkedin_account=row['linkedin_account']
+    #     )
+    #     for row in data.data
+    # ]
+    # return users
+  
 
 
 def make_course(title:str, description:str, home_page_picture:str, is_premium:bool, rating:float, objectives:str):

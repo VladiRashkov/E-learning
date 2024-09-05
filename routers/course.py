@@ -4,15 +4,22 @@ from services.courses_services import all, make_course, request_to_participate, 
 from data.models.user import User, UserRole
 from data.models.course import CreateCourse, UpdateCourse
 from common.auth import get_current_user
-
+from fastapi_pagination import Page, add_pagination, paginate
 course_router = APIRouter(prefix='/courses', tags=['courses'])
 
 
 # view by anybody
-@course_router.get('/')
-def get_courses():
+@course_router.get('/', response_model=Page[User])
+async def get_courses(current_user:User= Depends(get_current_user)):
+    role = current_user['role']
+    if role != 'admin':
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not authorized to update this user's information."
+            )
     courses = all()
-    return courses
+    return paginate(courses)
+
 
 #token to be implemented
 @course_router.post('/new_course')
