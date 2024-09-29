@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from services.users_services import get_user_by_id
 from pydantic import BaseModel
 import bcrypt
-
+jk-ljOLK.
 SECRET_KEY = 'supersecretkey'
 ALGORITHM = 'HS256'
 ACCESS_EXPIRE_MINUTES = 60
