@@ -1,6 +1,6 @@
 
 
-# E-Learning Platform
+# E-Learning Platform (PROJECT IS IN PROGRESS)
 Project Description
 
 This project is an e-learning platform that allows students to search for and enroll in online courses, and teachers to publish and manage the courses. Admins manage the platform by assigning teachers, approving students' enrollment to premium courses, and managing content visibility. The platform includes user roles (students, teachers, and admins), course management, and premium/public course subscriptions, with built-in search, progress tracking, and rating features.
@@ -40,10 +40,11 @@ Database: Relational Database (PostgreSQL/MySQL/SQLite) for storing user and cou
 Authentication: JWT Tokens for user authentication and role management
 Deployment: Docker and AWS for containerization and cloud hosting
 Documentation: Swagger for REST API documentation
-Testing: Unit tests with at least 60% code coverage for the service layer
-Version Control: Git for code management and collaboration
+TESTING - TO BE IMPLEMENTED
+FRONTEND WITH REACT/HTML/CSS TO BE IMPLEMENTED
 - Database
-The project uses a relational database that follows normalization principles, avoiding data duplication and ensuring efficient data storage.
+
+The project uses Supabase, a backend-as-a-service built on top of PostgreSQL, for managing the database. Supabase provides a structured query builder to interact with the database, allowing developers to perform operations without writing raw SQL. While this project does not currently use an ORM, the Supabase client handles query building and execution, simplifying interaction with the relational database.
 
 ## Database Structure
 Users: Information about students, teachers, and admins.
