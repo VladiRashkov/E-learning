@@ -4,9 +4,18 @@ from routers.enrollment import enrollment_router
 from routers.admin import admin_router
 from routers.section import section_router
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # You can specify a list of allowed origins here
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 app.include_router(users_router)
