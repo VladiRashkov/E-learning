@@ -68,7 +68,7 @@ const App = () => {
     <div>
       <nav className="navbar navbar bg-primary">
         <div className="container-fluid">
-          <a className="navbar-brand" href="/">
+          <a className="navbar-brand" href="/" style={{ fontSize: '24px', fontWeight: 'Medium', color: '#fff' }}>
             E-Learning App
           </a>
         </div>
@@ -86,21 +86,44 @@ const App = () => {
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-            />
+            ></input>
           </div>
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
+
+          <div>
+            <label htmlFor='description' className='form-label'>
+              Description
+            </label>
+          </div>
+      
         </form>
-        {courses.length > 0 ? (
-          <ul>
-            {courses.map((course) => (
-              <li key={course.id}>{course.title}</li>
-            ))}
-          </ul>
-        ) : (
-          <p>No courses available.</p>
-        )}
+
+        <table className='table table-stripped table-bordered table-hover'>
+          <thead>
+            <tr>
+              <th>title</th>
+              <th>description</th>
+              <th>home_page_picture</th>
+              <th>is_premium?</th>
+              <th>rating</th>
+              <th>objectives</th>
+            </tr>
+            </thead> 
+            <tbody>
+              {
+                courses.map((course) =>(
+                  <tr key = {course.course_id}>
+                    <td>{course.title}</td>
+                    <td>{course.description}</td>
+                    <td>{course.home_page_picture}</td>
+                    <td>{course.is_premium ? 'Yes': 'No'}</td>
+                    <td>{course.rating}</td>
+                    <td>{course.objectives}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+
+        </table>
       </div>
     </div>
   );

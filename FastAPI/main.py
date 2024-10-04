@@ -4,6 +4,7 @@ from routers.enrollment import enrollment_router
 from routers.admin import admin_router
 from routers.section import section_router
 from fastapi import FastAPI
+from fastapi_pagination import add_pagination
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -23,3 +24,5 @@ app.include_router(admin_router)
 app.include_router(course_router)
 app.include_router(enrollment_router)
 app.include_router(section_router)
+
+add_pagination(app)

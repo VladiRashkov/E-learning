@@ -8,7 +8,7 @@ class CreateCourse(BaseModel):
     __tablename__ = 'courses'
     title:str
     description:str
-    home_page_picture:str
+    home_page_picture: Optional[str] = None
     is_premium:bool = False
     rating: float
     objectives:str
@@ -31,7 +31,7 @@ class CreateCourse(BaseModel):
 class UpdateCourse(BaseModel):
     title: str = ''
     description: Optional[str] = ''
-    home_page_picture: Optional[str] = ''
+    home_page_picture: Optional[str] = None
     is_premium: bool = False
     rating: condecimal(max_digits=3, decimal_places=2) = 0.00
     objectives: Optional[str] = ''
