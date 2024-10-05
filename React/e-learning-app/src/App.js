@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from './api';
 
+
+
 const App = () => {
   const [courses, setCourses] = useState([]);
   const [formData, setFormData] = useState({
@@ -11,18 +13,19 @@ const App = () => {
     rating: '',
     objectives: '',
   });
-//admin token
-  localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxNCwiZXhwIjoxNzI4MDM4ODI5fQ.rJ78QVU5KxAA48tp6g3dCZsv_Tmtf98RhUi0S4I6S4s');
+
 
   const fetchCourses = async () => {
     try {
-      const token = localStorage.getItem('token'); // Get token from localStorage
+      const token = localStorage.getItem('token'); 
+  
       const response = await api.get('/courses', {
         headers: {
           Authorization: `Bearer ${token}`, // Include token in the request header
         },
       });
-      setCourses(response.data);
+      console.log(response.data);  // Inspect the structure to confirm
+      setCourses(response.data.items); // Access the paginated items
     } catch (error) {
       if (error.response && error.response.status === 403) {
         console.error('Unauthorized: ', error.response.data.detail);
@@ -31,6 +34,7 @@ const App = () => {
       }
     }
   };
+  
 
   useEffect(() => {
     fetchCourses();
@@ -110,8 +114,8 @@ const App = () => {
             </thead> 
             <tbody>
               {
-                courses.map((course) =>(
-                  <tr key = {course.course_id}>
+                courses.map((course, index) =>(
+                  <tr key = {index}>
                     <td>{course.title}</td>
                     <td>{course.description}</td>
                     <td>{course.home_page_picture}</td>

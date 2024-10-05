@@ -5,7 +5,6 @@ from pydantic import BaseModel, Field
 
 
 class CreateCourse(BaseModel):
-    __tablename__ = 'courses'
     title:str
     description:str
     home_page_picture: Optional[str] = None

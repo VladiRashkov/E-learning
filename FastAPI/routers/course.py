@@ -10,8 +10,8 @@ from typing import Optional
 course_router = APIRouter(prefix='/courses', tags=['courses'])
 
 
-# view by anybody
-@course_router.get('/', response_model=Page[CreateCourse])
+# view by anybody  response_model=Page[CreateCourse]
+@course_router.get('/')
 async def get_courses(current_user:User= Depends(get_current_user)):
     role = current_user['role']
     if role != 'admin':
@@ -20,7 +20,7 @@ async def get_courses(current_user:User= Depends(get_current_user)):
             detail="You are not authorized to update this user's information."
             )
     courses = all()
-    return paginate(courses)
+    return courses
 
 
 #token to be implemented
