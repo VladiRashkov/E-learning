@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Login from './login';  // Import Login component
 import api from './api';
 
 const App = () => {
@@ -11,19 +12,18 @@ const App = () => {
     rating: '',
     objectives: '',
   });
+  const [token, setToken] = useState(null);  // Add token state to manage login
 
   const fetchCourses = async () => {
     try {
-      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxNCwiZXhwIjoxNzI4MzAwNzAyfQ.5GIJD79Eh7atZeMnl7T_aF52EOcBk91qG3ThQJHLEtI';  // Use your hardcoded token
-
       const response = await api.get('/courses', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      console.log(response.data);  
-      setCourses(response.data.items || response.data); 
+      console.log(response.data);
+      setCourses(response.data.items || response.data);
     } catch (error) {
       if (error.response && error.response.status === 403) {
         console.error('Unauthorized: ', error.response.data.detail);
@@ -34,8 +34,10 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetchCourses();
-  }, []);
+    if (token) {
+      fetchCourses();
+    }
+  }, [token]);
 
   const handleInputChange = (event) => {
     const value =
@@ -48,14 +50,13 @@ const App = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const token = 'your-hardcoded-token';  // Use your hardcoded token
     try {
       await api.post('/courses', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      fetchCourses(); // Refresh courses after submitting a new one
+      fetchCourses();  // Refresh courses after submitting a new one
       setFormData({
         title: '',
         description: '',
@@ -69,6 +70,11 @@ const App = () => {
     }
   };
 
+  // Conditional rendering
+  if (!token) {
+    return <Login onLogin={(token) => setToken(token)} />;  // Pass token to App
+  }
+
   return (
     <div>
       <nav className="navbar navbar bg-primary">
@@ -81,9 +87,7 @@ const App = () => {
       <div className="container">
         <form onSubmit={handleFormSubmit}>
           <div className="mb-3 mt-3">
-            <label htmlFor="title" className="form-label">
-              Title
-            </label>
+            <label htmlFor="title" className="form-label">Title</label>
             <input
               type="text"
               className="form-control"
@@ -91,39 +95,38 @@ const App = () => {
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-            ></input>
+            />
           </div>
 
           <div>
-            <label htmlFor='description' className='form-label'>
-              Description
-            </label>
+            <label htmlFor='description' className='form-label'>Description</label>
           </div>
-      
+
+          {/* Add other input fields here */}
         </form>
 
         <table className='table table-stripped table-bordered table-hover'>
           <thead>
             <tr>
-              <th>title</th>
-              <th>description</th>
-              <th>home_page_picture</th>
-              <th>is_premium?</th>
-              <th>rating</th>
-              <th>objectives</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Home Page Picture</th>
+              <th>Is Premium?</th>
+              <th>Rating</th>
+              <th>Objectives</th>
             </tr>
           </thead>
           <tbody>
-            {courses && courses.length > 0 ? (
+            {courses.length > 0 ? (
               courses.map((course, index) => (
                 <tr key={index}>
                   <td>{course.title}</td>
                   <td>{course.description}</td>
                   <td>
                     {course.home_page_picture ? (
-                      <img 
-                        src={`data:image/jpeg;base64,${course.home_page_picture}`} 
-                        alt="Course" 
+                      <img
+                        src={`data:image/jpeg;base64,${course.home_page_picture}`}
+                        alt="Course"
                         style={{ width: '100px', height: 'auto' }}
                       />
                     ) : 'No Image'}
