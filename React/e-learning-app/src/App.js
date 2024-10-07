@@ -12,26 +12,28 @@ const App = () => {
     rating: '',
     objectives: '',
   });
-  const [token, setToken] = useState(null);  // Add token state to manage login
+  const [token, setToken] = useState(localStorage.getItem('token'));  // Add token state to manage login
 
   const fetchCourses = async () => {
     try {
+      
+      console.log(token)
       const response = await api.get('/courses', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      console.log(response.data);
+  
       setCourses(response.data.items || response.data);
     } catch (error) {
-      if (error.response && error.response.status === 403) {
-        console.error('Unauthorized: ', error.response.data.detail);
-      } else {
-        console.error('An error occurred:', error);
+      console.error('An error occurred:', error);
+      if (error.response && error.response.status === 401) {
+        setToken(null);
+        localStorage.removeItem('token');
       }
     }
   };
+  
 
   useEffect(() => {
     if (token) {
@@ -56,7 +58,7 @@ const App = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      fetchCourses();  // Refresh courses after submitting a new one
+      fetchCourses();
       setFormData({
         title: '',
         description: '',
@@ -70,7 +72,12 @@ const App = () => {
     }
   };
 
-  // Conditional rendering
+  const handleLogout = () => {
+    setToken(null);
+    localStorage.removeItem('token');  // Remove token from local storage
+  };
+
+
   if (!token) {
     return <Login onLogin={(token) => setToken(token)} />;  // Pass token to App
   }
@@ -82,6 +89,7 @@ const App = () => {
           <a className="navbar-brand" href="/" style={{ fontSize: '24px', fontWeight: 'Medium', color: '#fff' }}>
             E-Learning App
           </a>
+          <button onClick={handleLogout} className="btn btn-danger">Logout</button> {/* Logout button */}
         </div>
       </nav>
       <div className="container">

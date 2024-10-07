@@ -5,7 +5,7 @@ from data.models.course import CreateCourse
 
 def all():
     data = query.table('courses').select('*').execute()
-    #NOt tested
+    
     courses = [
         CreateCourse(
             title=row['title'],

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import api from './api';  
 
 const Login = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -10,12 +10,16 @@ const Login = ({ onLogin }) => {
     e.preventDefault();
 
     try {
-      const response = await api.post('/login', {
-        username,
+      const response = await api.post('/users/login', {
+        email,
         password,
       });
-      const token = response.data.token;  // Assuming the response contains the token
-      onLogin(token);  // Pass token to parent component
+      console.log('Response:', response); 
+      const token = response.data.access_token;  
+      console.log('Token:', token);
+      
+      localStorage.setItem('token', token);
+      onLogin(token);  
     } catch (error) {
       setErrorMessage('Invalid credentials, please try again.');
     }
@@ -29,8 +33,8 @@ const Login = ({ onLogin }) => {
           <label>Username</label>
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
