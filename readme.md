@@ -1,7 +1,7 @@
 
 
 # E-Learning Platform (PROJECT IS IN PROGRESS)
-Project Description
+## Project Description
 
 This project is an e-learning platform that allows students to search for and enroll in online courses, and teachers to publish and manage the courses. Admins manage the platform by assigning teachers, approving students' enrollment to premium courses, and managing content visibility. The platform includes user roles (students, teachers, and admins), course management, and premium/public course subscriptions, with built-in search, progress tracking, and rating features.
 
@@ -44,7 +44,7 @@ This project is an e-learning platform that allows students to search for and en
 - TESTING - TO BE IMPLEMENTED
 - FRONTEND WITH REACT/HTML/CSS TO BE IMPLEMENTED
 
-### Database\
+### Database
 The project uses Supabase, a backend-as-a-service built on top of PostgreSQL, for managing the database. Supabase provides a structured query builder to interact with the database, allowing developers to perform operations without writing raw SQL. While this project does not currently use an ORM, the Supabase client handles query building and execution, simplifying interaction with the relational database.
 
 ## Database Structure
@@ -52,12 +52,11 @@ The project uses Supabase, a backend-as-a-service built on top of PostgreSQL, fo
 - Courses: Each course has a unique title, description, tags, and sections.
 - Sections: A course can be divided into multiple sections with optional external resources.
 - Enrollment: Tracks students' enrollment and course progress.
-- Scripts\
+- Scripts
 - Database Creation Script: A script to create the database schema.
 - Data Population Script: A script to populate the database with initial data.
-- API Endpoints\
+- API Endpoints
 - The platform provides a RESTful API for managing users, courses, sections, and enrollments.
-- 
 - User Endpoints: CRUD operations for students, teachers, and admins.
 - Course Endpoints: Create, update, delete, and manage courses and sections.
 - Enrollment Endpoints: Enroll in courses, rate courses, and track progress.
