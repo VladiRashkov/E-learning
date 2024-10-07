@@ -17,11 +17,11 @@ const App = () => {
 
   const fetchCourses = async () => {
     try {
-      const token = localStorage.getItem('token'); 
+      const token = localStorage.getItem('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxNCwiZXhwIjoxNzI4MTQwOTA0fQ.Lxw6ti4IrIxbKVgFtsaTX7X068rMQEAxXLl4GKtYSGs'); 
   
       const response = await api.get('/courses', {
         headers: {
-          Authorization: `Bearer ${token}`, // Include token in the request header
+          Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxNCwiZXhwIjoxNzI4MTQwOTA0fQ.Lxw6ti4IrIxbKVgFtsaTX7X068rMQEAxXLl4GKtYSGs'}`, // Include token in the request header
         },
       });
       console.log(response.data);  // Inspect the structure to confirm
@@ -113,19 +113,25 @@ const App = () => {
             </tr>
             </thead> 
             <tbody>
-              {
-                courses.map((course, index) =>(
-                  <tr key = {index}>
-                    <td>{course.title}</td>
-                    <td>{course.description}</td>
-                    <td>{course.home_page_picture}</td>
-                    <td>{course.is_premium ? 'Yes': 'No'}</td>
-                    <td>{course.rating}</td>
-                    <td>{course.objectives}</td>
-                  </tr>
-                ))
-              }
-            </tbody>
+  {
+    (courses && courses.length > 0) ? (
+      courses.map((course, index) => (
+        <tr key={index}>
+          <td>{course.title}</td>
+          <td>{course.description}</td>
+          <td>{course.home_page_picture}</td>
+          <td>{course.is_premium ? 'Yes' : 'No'}</td>
+          <td>{course.rating}</td>
+          <td>{course.objectives}</td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan="6">No courses available</td>
+      </tr>
+    )
+  }
+  </tbody>
 
         </table>
       </div>
