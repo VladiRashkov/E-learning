@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from './api';  
+import './Login.css';  // Import external CSS
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
@@ -26,30 +27,32 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username</label>
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-        <button type="submit">Login</button>
-      </form>
+    <div className="login-container">
+      <div className="login-box">
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Username</label>
+            <input
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+          <button type="submit">Login</button>
+        </form>
+      </div>
     </div>
   );
 };

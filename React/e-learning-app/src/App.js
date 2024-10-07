@@ -84,19 +84,30 @@ const App = () => {
 
   return (
     <div>
-      <nav className="navbar navbar bg-primary">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="/" style={{ fontSize: '24px', fontWeight: 'Medium', color: '#fff' }}>
-            E-Learning App
-          </a>
-          <button onClick={handleLogout} className="btn btn-danger">Logout</button> {/* Logout button */}
-        </div>
-      </nav>
+      <nav 
+    className="navbar" 
+    style={{ 
+      backgroundColor: '#F5F5DC', 
+      height: '100px', 
+      border: '2px solid #FFFFFF',  // White outline
+      borderRadius: '5px'  // Optional: for rounded corners
+    }}>
+    <div className="container-fluid">
+      <a 
+        className="navbar-brand" 
+        href="/" 
+        style={{ fontSize: '24px', fontWeight: 'Medium', color: '#000000' }}>
+        E-Learning App
+      </a>
+      <button onClick={handleLogout} className="btn btn-danger">Logout</button> {/* Logout button */}
+    </div>
+  </nav>
       <div className="container">
         <form onSubmit={handleFormSubmit}>
           <div className="mb-3 mt-3">
-            <label htmlFor="title" className="form-label">Title</label>
+            <label htmlFor="title" className="form-label" style={{ backgroundColor: '#ffffff' }}>Search</label>
             <input
+              style={{ backgroundColor: '#F5F5DC' }}
               type="text"
               className="form-control"
               id="title"
@@ -106,30 +117,26 @@ const App = () => {
             />
           </div>
 
-          <div>
-            <label htmlFor='description' className='form-label'>Description</label>
-          </div>
-
           {/* Add other input fields here */}
         </form>
 
         <table className='table table-stripped table-bordered table-hover'>
           <thead>
-            <tr>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Home Page Picture</th>
-              <th>Is Premium?</th>
-              <th>Rating</th>
-              <th>Objectives</th>
+            <tr style={{ backgroundColor: '#FFFFFF' }}>
+              <th style={{ color: '#101820' }}>Title</th>
+              <th style={{ color: '#101820' }}>Description</th>
+              <th style={{ color: '#101820' }}>Home Page Picture</th>
+              <th style={{ color: '#101820' }}>Is Premium?</th>
+              <th style={{ color: '#101820' }}>Rating</th>
+              <th style={{ color: '#101820' }}>Objectives</th>
             </tr>
           </thead>
           <tbody>
             {courses.length > 0 ? (
               courses.map((course, index) => (
-                <tr key={index}>
-                  <td>{course.title}</td>
-                  <td>{course.description}</td>
+                <tr key={index} style={{ backgroundColor: '#F5F5DC' }}>
+                  <td style={{ color: '#000000' }}>{course.title}</td>
+                  <td style={{ color: '#000000' }}>{course.description}</td>
                   <td>
                     {course.home_page_picture ? (
                       <img
@@ -139,9 +146,9 @@ const App = () => {
                       />
                     ) : 'No Image'}
                   </td>
-                  <td>{course.is_premium ? 'Yes' : 'No'}</td>
-                  <td>{course.rating}</td>
-                  <td>{course.objectives || 'No objectives'}</td>
+                  <td style={{ color: '#000000' }}>{course.is_premium ? 'Yes' : 'No'}</td>
+                  <td style={{ color: '#000000' }}>{course.rating}</td>
+                  <td style={{ color: '#000000' }}>{course.objectives || 'No objectives'}</td>
                 </tr>
               ))
             ) : (
