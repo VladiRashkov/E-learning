@@ -36,7 +36,9 @@ This project is an e-learning platform that allows students to search for and en
 - Approve teacher registrations and course enrollments.
 - Deactivate/reactivate users.
 - Delete/hide courses and manage notifications for students.
-- Technologies Used
+
+
+### Technologies Used
 - Framework: FastAPI
 - Database: Relational Database (PostgreSQL) for storing user and course information
 - Authentication: JWT Tokens for user authentication and role management
