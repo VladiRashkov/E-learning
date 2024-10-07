@@ -10,15 +10,16 @@ This project is an e-learning platform that allows students to search for and en
 Students, teachers, and admins are supported. \
 Admins assign teachers and manage user access.\
 Teachers manage courses, approve enrollments, and generate student reports.\
-Students can enroll in courses, track progress, rate courses, and more.\
+Students can enroll in courses, track progress, rate courses, and more.
 
-- Courses
+- Courses\
 
 Courses include a title, description, objectives, tags, and sections.\
 Teachers can create and manage course content.\
 Courses can be public or premium, with enrollment and subscription options.\
-Course ratings are calculated based on student feedback.\
-- Sections
+Course ratings are calculated based on student feedback.
+
+- Sections\
 
 Courses can be divided into sections, each with its own title, content, and optional description.\
 Sections can be sorted by ID or name.\
@@ -43,9 +44,9 @@ Database: Relational Database (PostgreSQL/MySQL/SQLite) for storing user and cou
 Authentication: JWT Tokens for user authentication and role management\
 Documentation: Swagger for REST API documentation\
 TESTING - TO BE IMPLEMENTED\
-FRONTEND WITH REACT/HTML/CSS TO BE IMPLEMENTED\
+FRONTEND WITH REACT/HTML/CSS TO BE IMPLEMENTED
 
-- Database
+- Database\
 
 The project uses Supabase, a backend-as-a-service built on top of PostgreSQL, for managing the database. Supabase provides a structured query builder to interact with the database, allowing developers to perform operations without writing raw SQL. While this project does not currently use an ORM, the Supabase client handles query building and execution, simplifying interaction with the relational database.
 
@@ -58,9 +59,9 @@ Scripts\
 Database Creation Script: A script to create the database schema.\
 Data Population Script: A script to populate the database with initial data.\
 API Endpoints\
-The platform provides a RESTful API for managing users, courses, sections, and enrollments.\
+The platform provides a RESTful API for managing users, courses, sections, and enrollments.
 
 User Endpoints: CRUD operations for students, teachers, and admins.\
 Course Endpoints: Create, update, delete, and manage courses and sections.\
 Enrollment Endpoints: Enroll in courses, rate courses, and track progress.\
-For detailed API documentation, please refer to the Swagger Documentation.\
+For detailed API documentation, please refer to the Swagger Documentation.
