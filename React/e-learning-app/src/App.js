@@ -22,8 +22,8 @@ const App = () => {
         },
       });
 
-      console.log(response.data);  // Check if response data structure is correct
-      setCourses(response.data.items || response.data); // Adjust this based on the actual structure
+      console.log(response.data);  
+      setCourses(response.data.items || response.data); 
     } catch (error) {
       if (error.response && error.response.status === 403) {
         console.error('Unauthorized: ', error.response.data.detail);
