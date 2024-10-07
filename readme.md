@@ -6,11 +6,12 @@ Project Description
 This project is an e-learning platform that allows students to search for and enroll in online courses, and teachers to publish and manage the courses. Admins manage the platform by assigning teachers, approving students' enrollment to premium courses, and managing content visibility. The platform includes user roles (students, teachers, and admins), course management, and premium/public course subscriptions, with built-in search, progress tracking, and rating features.
 
 ## Features
-- Users \
+- Users\
 Students, teachers, and admins are supported. \
 Admins assign teachers and manage user access.\
 Teachers manage courses, approve enrollments, and generate student reports.\
 Students can enroll in courses, track progress, rate courses, and more.\
+
 - Courses
 
 Courses include a title, description, objectives, tags, and sections.\
