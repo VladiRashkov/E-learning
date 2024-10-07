@@ -40,7 +40,7 @@ Deactivate/reactivate users.\
 Delete/hide courses and manage notifications for students.\
 Technologies Used\
 Framework: FastAPI\
-Database: Relational Database (PostgreSQL/MySQL/SQLite) for storing user and course information\
+Database: Relational Database (PostgreSQL) for storing user and course information\
 Authentication: JWT Tokens for user authentication and role management\
 Documentation: Swagger for REST API documentation\
 TESTING - TO BE IMPLEMENTED\
