@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from './api';
 
-
-
 const App = () => {
   const [courses, setCourses] = useState([]);
   const [formData, setFormData] = useState({
@@ -14,18 +12,18 @@ const App = () => {
     objectives: '',
   });
 
-
   const fetchCourses = async () => {
     try {
-      const token = localStorage.getItem('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxNCwiZXhwIjoxNzI4MTQwOTA0fQ.Lxw6ti4IrIxbKVgFtsaTX7X068rMQEAxXLl4GKtYSGs'); 
-  
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxNCwiZXhwIjoxNzI4MzAwNzAyfQ.5GIJD79Eh7atZeMnl7T_aF52EOcBk91qG3ThQJHLEtI';  // Use your hardcoded token
+
       const response = await api.get('/courses', {
         headers: {
-          Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxNCwiZXhwIjoxNzI4MTQwOTA0fQ.Lxw6ti4IrIxbKVgFtsaTX7X068rMQEAxXLl4GKtYSGs'}`, // Include token in the request header
+          Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data);  // Inspect the structure to confirm
-      setCourses(response.data.items); // Access the paginated items
+
+      console.log(response.data);  // Check if response data structure is correct
+      setCourses(response.data.items || response.data); // Adjust this based on the actual structure
     } catch (error) {
       if (error.response && error.response.status === 403) {
         console.error('Unauthorized: ', error.response.data.detail);
@@ -34,7 +32,6 @@ const App = () => {
       }
     }
   };
-  
 
   useEffect(() => {
     fetchCourses();
@@ -51,21 +48,25 @@ const App = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const token = localStorage.getItem('token'); // Get token for POST request
-    await api.post('/courses', formData, {
-      headers: {
-        Authorization: `Bearer ${token}`, // Include token in the request header
-      },
-    });
-    fetchCourses();
-    setFormData({
-      title: '',
-      description: '',
-      home_page_picture: '',
-      is_premium: false,
-      rating: '',
-      objectives: '',
-    });
+    const token = 'your-hardcoded-token';  // Use your hardcoded token
+    try {
+      await api.post('/courses', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      fetchCourses(); // Refresh courses after submitting a new one
+      setFormData({
+        title: '',
+        description: '',
+        home_page_picture: '',
+        is_premium: false,
+        rating: '',
+        objectives: '',
+      });
+    } catch (error) {
+      console.error('Error submitting course:', error);
+    }
   };
 
   return (
@@ -111,28 +112,33 @@ const App = () => {
               <th>rating</th>
               <th>objectives</th>
             </tr>
-            </thead> 
-            <tbody>
-  {
-    (courses && courses.length > 0) ? (
-      courses.map((course, index) => (
-        <tr key={index}>
-          <td>{course.title}</td>
-          <td>{course.description}</td>
-          <td>{course.home_page_picture}</td>
-          <td>{course.is_premium ? 'Yes' : 'No'}</td>
-          <td>{course.rating}</td>
-          <td>{course.objectives}</td>
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td colSpan="6">No courses available</td>
-      </tr>
-    )
-  }
-  </tbody>
-
+          </thead>
+          <tbody>
+            {courses && courses.length > 0 ? (
+              courses.map((course, index) => (
+                <tr key={index}>
+                  <td>{course.title}</td>
+                  <td>{course.description}</td>
+                  <td>
+                    {course.home_page_picture ? (
+                      <img 
+                        src={`data:image/jpeg;base64,${course.home_page_picture}`} 
+                        alt="Course" 
+                        style={{ width: '100px', height: 'auto' }}
+                      />
+                    ) : 'No Image'}
+                  </td>
+                  <td>{course.is_premium ? 'Yes' : 'No'}</td>
+                  <td>{course.rating}</td>
+                  <td>{course.objectives || 'No objectives'}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6">No courses available</td>
+              </tr>
+            )}
+          </tbody>
         </table>
       </div>
     </div>
