@@ -13,11 +13,13 @@ Admins assign teachers and manage user access.\
 Teachers manage courses, approve enrollments, and generate student reports.\
 Students can enroll in courses, track progress, rate courses, and more.\
 - Courses
+
 Courses include a title, description, objectives, tags, and sections.\
 Teachers can create and manage course content.\
 Courses can be public or premium, with enrollment and subscription options.\
 Course ratings are calculated based on student feedback.\
 - Sections
+
 Courses can be divided into sections, each with its own title, content, and optional description.\
 Sections can be sorted by ID or name.\
 Authentication and User Management\
@@ -42,6 +44,7 @@ Authentication: JWT Tokens for user authentication and role management\
 Documentation: Swagger for REST API documentation\
 TESTING - TO BE IMPLEMENTED\
 FRONTEND WITH REACT/HTML/CSS TO BE IMPLEMENTED\
+
 - Database
 
 The project uses Supabase, a backend-as-a-service built on top of PostgreSQL, for managing the database. Supabase provides a structured query builder to interact with the database, allowing developers to perform operations without writing raw SQL. While this project does not currently use an ORM, the Supabase client handles query building and execution, simplifying interaction with the relational database.
