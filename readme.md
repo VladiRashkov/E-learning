@@ -8,7 +8,7 @@ This project is an e-learning platform that allows students to search for and en
 ## Features
 - Users
 
-Students, teachers, and admins are supported.
+Students, teachers, and admins are supported. n\
 Admins assign teachers and manage user access.
 Teachers manage courses, approve enrollments, and generate student reports.
 Students can enroll in courses, track progress, rate courses, and more.
