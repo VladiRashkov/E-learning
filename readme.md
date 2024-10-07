@@ -44,7 +44,7 @@ This project is an e-learning platform that allows students to search for and en
 - Authentication: JWT Tokens for user authentication and role management
 - Documentation: Swagger for REST API documentation
 - TESTING - TO BE IMPLEMENTED
-- FRONTEND WITH REACT/HTML/CSS TO BE IMPLEMENTED
+- FRONTEND with REACT/HTML/CSS in progress
 
 ### Database
 The project uses Supabase, a backend-as-a-service built on top of PostgreSQL, for managing the database. Supabase provides a structured query builder to interact with the database, allowing developers to perform operations without writing raw SQL. While this project does not currently use an ORM, the Supabase client handles query building and execution, simplifying interaction with the relational database.
