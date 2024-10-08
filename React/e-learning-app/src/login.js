@@ -26,9 +26,15 @@ const Login = ({ onLogin }) => {
     }
   };
 
+  const handleRegister = () => {
+    // Handle registration logic or navigate to registration page
+    console.log('Register button clicked');
+  };
+
   return (
     <div className="login-container">
       <div className="login-box">
+        <h1><strong><u>E-learning LTD.</u></strong></h1> {/* Bold and Underline */}
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
           <div>
@@ -52,6 +58,9 @@ const Login = ({ onLogin }) => {
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
           <button type="submit">Login</button>
         </form>
+        <div className="register-container">
+          <button onClick={handleRegister}>Register</button>
+        </div>
       </div>
     </div>
   );

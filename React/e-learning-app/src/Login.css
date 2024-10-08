@@ -1,13 +1,14 @@
-/* Center the login box and set a sky-blue background */
+/* General styles for login page */
 html, body {
     height: 100%;
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #101820; /* Sky blue */
+    background-color: #101820;
   }
   
+  /* Login container */
   .login-container {
     display: flex;
     justify-content: center;
@@ -15,12 +16,17 @@ html, body {
     height: 100%;
   }
   
+  /* Login box */
   .login-box {
     background-color: white;
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+  }
+  
+  .login-box h1 {
+    margin-bottom: 10px;
   }
   
   .login-box h2 {
@@ -41,21 +47,46 @@ html, body {
     border-radius: 4px;
   }
   
+  /* Login button styles */
   .login-box button {
     width: 100%;
     padding: 10px;
-    background-color: #3e3193;
+    background-color: #3e3193; /* Purple background for Login */
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-top: 10px;
   }
   
   .login-box button:hover {
-    background-color: #7db300;
+    background-color: #7db300; /* Green on hover for Login */
   }
   
+  /* Error message */
   p {
     color: red;
+  }
+  
+  /* Register container */
+  .register-container {
+    margin-top: 5px;
+    text-align: center;
+  }
+  
+  /* Register button styles */
+  .register-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #3e3193; /* Red background for Register */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .register-container button:hover {
+    background-color: #7db300; /* Darker red on hover for Register */
   }
   
