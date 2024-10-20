@@ -12,28 +12,31 @@ const App = () => {
     rating: '',
     objectives: '',
   });
-  const [token, setToken] = useState(localStorage.getItem('token'));  // Add token state to manage login
+  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const fetchCourses = async () => {
+    setLoading(true);
+    setError('');  // Reset error state
     try {
-      
-      console.log(token)
       const response = await api.get('/courses', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-  
       setCourses(response.data.items || response.data);
     } catch (error) {
       console.error('An error occurred:', error);
+      setError('Failed to fetch courses. Please try again.');
       if (error.response && error.response.status === 401) {
         setToken(null);
         localStorage.removeItem('token');
       }
+    } finally {
+      setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     if (token) {
@@ -42,8 +45,7 @@ const App = () => {
   }, [token]);
 
   const handleInputChange = (event) => {
-    const value =
-      event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
     setFormData({
       ...formData,
       [event.target.name]: value,
@@ -69,43 +71,43 @@ const App = () => {
       });
     } catch (error) {
       console.error('Error submitting course:', error);
+      setError('Error submitting course. Please try again.');
     }
   };
 
   const handleLogout = () => {
     setToken(null);
-    localStorage.removeItem('token');  // Remove token from local storage
+    localStorage.removeItem('token');
   };
 
-
   if (!token) {
-    return <Login onLogin={(token) => setToken(token)} />;  // Pass token to App
+    return <Login onLogin={(token) => setToken(token)} />;
   }
 
   return (
     <div>
       <nav 
-    className="navbar" 
-    style={{ 
-      backgroundColor: '#F5F5DC', 
-      height: '100px', 
-      border: '2px solid #FFFFFF',  // White outline
-      borderRadius: '5px'  // Optional: for rounded corners
-    }}>
-    <div className="container-fluid">
-      <a 
-        className="navbar-brand" 
-        href="/" 
-        style={{ fontSize: '24px', fontWeight: 'Medium', color: '#000000' }}>
-        E-Learning App
-      </a>
-      <button onClick={handleLogout} className="btn btn-danger">Logout</button> {/* Logout button */}
-    </div>
-  </nav>
+        className="navbar" 
+        style={{ 
+          backgroundColor: '#F5F5DC', 
+          height: '100px', 
+          border: '2px solid #FFFFFF',
+          borderRadius: '5px' 
+        }}>
+        <div className="container-fluid navbar">
+          <a 
+            className="navbar-brand" 
+            href="/" 
+            style={{ fontSize: '24px', fontWeight: 'Medium', color: '#000000' }}>
+            E-Learning App
+          </a>
+          <button onClick={handleLogout} className="btn btn-danger" >Logout</button>
+        </div>
+      </nav>
       <div className="container">
         <form onSubmit={handleFormSubmit}>
           <div className="mb-3 mt-3">
-            <label htmlFor="title" className="form-label" style={{ backgroundColor: '#ffffff' }}>Search</label>
+            <label htmlFor="title" className="form-label" style={{ backgroundColor: '#ffffff' }}>Title</label>
             <input
               style={{ backgroundColor: '#F5F5DC' }}
               type="text"
@@ -114,11 +116,15 @@ const App = () => {
               name="title"
               value={formData.title}
               onChange={handleInputChange}
+              required
             />
           </div>
-
-          {/* Add other input fields here */}
+          {/* Other input fields */}
+          <button type="submit" className="btn btn-primary">Add Course</button>
         </form>
+
+        {loading && <p>Loading courses...</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
 
         <table className='table table-stripped table-bordered table-hover'>
           <thead>
