@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, status
-from services.courses_services import all, make_course
-from data.models.user import User
-from data.models.section import Section
-from common.auth import get_current_user
-from services.section_services import new_section, all_sections_under_course
+from FastAPI.services.courses_services import all, make_course
+from FastAPI.data.models.user import User
+from FastAPI.data.models.section import Section
+from FastAPI.common.auth import get_current_user
+from FastAPI.services.section_services import new_section, all_sections_under_course
 
 section_router = APIRouter(prefix='/sections', tags=['sections'])
 

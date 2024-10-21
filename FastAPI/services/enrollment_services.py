@@ -1,4 +1,4 @@
-from data.database import query
+from FastAPI.data.database import query
 from fastapi import HTTPException, status
 
 

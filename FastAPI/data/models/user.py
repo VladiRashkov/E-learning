@@ -1,4 +1,4 @@
-from pydantic import BaseModel, constr, EmailStr, field_validator
+from pydantic import BaseModel, constr, EmailStr, field_validator, HttpUrl, constr
 from typing import Optional
 from enum import Enum
 from fastapi import HTTPException, status, Query
@@ -60,3 +60,27 @@ class UpdateUserData(BaseModel):
             return v.lower()  # Convert the role to lowercase before processing
         return v
 
+
+class CreateUserData(BaseModel):
+    email: EmailStr
+    password: constr(min_length=8)
+    first_name: str
+    last_name: str
+    password: str
+    photo: Optional[str] | None=None
+    role: UserRole
+    phone_number: Optional[str] | None
+    linkedin_account: Optional[str] | None
+    class Config:
+        schema_extra = {
+            "example": {
+                "email": "example@example.com",
+                "password": "yourpassword",
+                "first_name": "John",
+                "last_name": "Doe",
+                "photo": "https://example.com/photo.jpg",
+                "role": "teacher",
+                "phone_number": "+1234567890",
+                "linkedin_account": "https://www.linkedin.com/in/example"
+            }
+        }

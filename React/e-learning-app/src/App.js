@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Login from './login';  // Import Login component
+import Login from './login';  
 import api from './api';
 
 const App = () => {
@@ -18,7 +18,7 @@ const App = () => {
 
   const fetchCourses = async () => {
     setLoading(true);
-    setError('');  // Reset error state
+    setError('');  
     try {
       const response = await api.get('/courses', {
         headers: {

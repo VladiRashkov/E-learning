@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
-from data.models.user import User
-from common.auth import get_current_user
-from services.admin_services import approve_role_change_request, reject_role_change_request,\
+from FastAPI.data.models.user import User
+from FastAPI.common.auth import get_current_user
+from FastAPI.services.admin_services import approve_role_change_request, reject_role_change_request,\
     get_role_change_requests, remove_role, tag_creation, assign
 
 admin_router = APIRouter(prefix='/admin', tags=['admin'])

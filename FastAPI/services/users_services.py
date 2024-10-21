@@ -1,7 +1,7 @@
-from data.database import query
+from FastAPI.data.database import query
 from fastapi import HTTPException, status
 import bcrypt
-from data.models.user import User
+from FastAPI.data.models.user import User
 
 
 def all():
@@ -30,30 +30,46 @@ def hash_password(plain_password: str) -> str:
     return hashed_password.decode('utf-8')
 
 
-def new_user(email:str, password:str):
-    data = query.table('users').select('*').eq('email', email).execute()
-    hashed_password = hash_password(password)
+# def new_user(email:str, password:str):
+#     data = query.table('users').select('*').eq('email', email).execute()
+#     hashed_password = hash_password(password)
     
-    if data == []:
-        return None
-    else:
-        new_registration = query.table('users').insert({'email':email, 'password':hashed_password}).execute()
-        return new_registration
+#     if data == []:
+#         return None
+#     else:
+#         new_registration = query.table('users').insert({'email':email, 'password':hashed_password}).execute()
+#         return new_registration
     
     
-def completed_account(email:str, first_name:str, last_name:str, photo:str, role:str, phone_number:str, linkedin_account:str):
-    find_user = query.table('users').select('*').eq('email',email).execute()
-    
+def completed_account(email: str, first_name: str, last_name: str, photo: str, role: str, phone_number: str, linkedin_account: str):
+    find_user = query.table('users').select('*').eq('email', email).execute()
+
     if not find_user:
-        return None
+        # Create a new account if user doesn't exist
+        new_registration = query.table('users').insert({
+            'email': email,
+            'first_name': first_name,
+            'last_name': last_name,
+            'photo': photo,
+            'role': role,
+            'phone_number': phone_number,
+            'linkedin_account': linkedin_account
+        }).execute()
+        return new_registration
+
     else:
-        details_user = query.table('users').update({'first_name':first_name, 'last_name':last_name, 
-                                                    'photo':photo, 
-                                                    'role':role, 
-                                                    'phone_number':phone_number, 
-                                                    'linkedin_account':linkedin_account}).eq('email', email).execute()
-    
+       
+        details_user = query.table('users').update({
+            'first_name': first_name,
+            'last_name': last_name,
+            'photo': photo,
+            'role': role,
+            'phone_number': phone_number,
+            'linkedin_account': linkedin_account
+        }).eq('email', email).execute()
+
         return details_user
+
     
     
 def get_user_by_id(user_id:int):
