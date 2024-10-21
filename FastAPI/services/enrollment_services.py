@@ -1,5 +1,6 @@
 from FastAPI.data.database import query
 from fastapi import HTTPException, status
+from FastAPI.data.models.course import CreateCourse
 
 
 #admin or teacher confirmation to be implemented
@@ -57,3 +58,27 @@ def part_of_courses(email: str):
             return all_courses, []  # No enrolled courses found
     else:
         raise ValueError("No user found with the provided email.")
+
+
+def courses_enrolled_in(user_id: int):
+    enrollments = query.table('enrollments').select('*').eq('student_id', user_id).execute()
+    
+    if not enrollments.data or len(enrollments.data) == 0:
+        return [] 
+    
+    course_ids = [enrollment['course_id'] for enrollment in enrollments.data]
+    courses = query.table('courses').select('*').in_('course_id', course_ids).execute()
+    
+    enrolled_courses = [
+        CreateCourse(
+            title=row['title'],
+            description=row['description'],
+            home_page_picture=row['home_page_picture'],
+            is_premium=row['is_premium'],
+            rating=row['rating'],
+            objectives=row['objectives']
+        )
+        for row in courses.data
+    ]
+    
+    return enrolled_courses

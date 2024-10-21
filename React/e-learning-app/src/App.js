@@ -4,18 +4,28 @@ import api from './api';
 
 const App = () => {
   const [courses, setCourses] = useState([]);
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    home_page_picture: '',
-    is_premium: false,
-    rating: '',
-    objectives: '',
-  });
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [searchTerm, setSearchTerm] = useState(''); // New state for search term
+  const [searchTerm, setSearchTerm] = useState(''); // Search term state
+
+  // Function to decode JWT token and extract user_id
+  const parseJwt = (token) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error('Invalid token');
+      return null;
+    }
+  };
 
   const fetchCourses = async () => {
     setLoading(true);
@@ -26,7 +36,7 @@ const App = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data);  // Add this to log the response
+      console.log(response.data);
       setCourses(response.data.items || response.data);
     } catch (error) {
       console.error('An error occurred:', error);
@@ -40,43 +50,11 @@ const App = () => {
     }
   };
 
-
   useEffect(() => {
     if (token) {
       fetchCourses();
     }
   }, [token]);
-
-  const handleInputChange = (event) => {
-    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-    setFormData({
-      ...formData,
-      [event.target.name]: value,
-    });
-  };
-
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      await api.post('/courses', formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      fetchCourses();
-      setFormData({
-        title: '',
-        description: '',
-        home_page_picture: '',
-        is_premium: false,
-        rating: '',
-        objectives: '',
-      });
-    } catch (error) {
-      console.error('Error submitting course:', error);
-      setError('Error submitting course. Please try again.');
-    }
-  };
 
   const handleLogout = () => {
     setToken(null);
@@ -100,12 +78,49 @@ const App = () => {
       console.log('Response:', response);
       alert(`Successfully joined course: ${title}`);
     } catch (error) {
-      // console.error('Error joining course:', error);
-      alert('Failed to join the course.');
+      if (error.response && error.response.status === 307) {
+        alert('A request to join the course has been sent for approval.');
+      } else {
+        alert('Failed to join the course.');
+      }
     }
   };
-  
-  
+
+  // Fetch enrolled courses and open them in a new window
+  const viewEnrolledCourses = async () => {
+    try {
+      const tokenData = parseJwt(token); // Decode the token to get user_id
+      const user_id = tokenData?.user_id; // Extract user_id
+
+      if (!user_id) {
+        alert('Unable to fetch user information.');
+        return;
+      }
+
+      const response = await api.get(`/enroll/enrolled_courses/${user_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const enrolledCourses = response.data;
+      const enrolledWindow = window.open('', '_blank');
+      enrolledWindow.document.write('<h1>Enrolled Courses</h1>');
+      enrolledWindow.document.write('<ul>');
+      enrolledCourses.forEach(course => {
+        enrolledWindow.document.write(`
+          <li>
+            <strong>Title:</strong> ${course.title} <br/>
+            <strong>Description:</strong> ${course.description}
+          </li>
+        `);
+      });
+      enrolledWindow.document.write('</ul>');
+    } catch (error) {
+      console.error('Error fetching enrolled courses:', error);
+      alert('Failed to fetch enrolled courses.');
+    }
+  };
+
   // Filtered courses based on search term
   const filteredCourses = courses.filter(course =>
     course.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -132,6 +147,7 @@ const App = () => {
             style={{ fontSize: '24px', fontWeight: 'Medium', color: '#000000' }}>
             E-Learning App
           </a>
+          <button onClick={viewEnrolledCourses} className="btn btn-primary">View Enrolled Courses</button>
           <button onClick={handleLogout} className="btn btn-danger">Logout</button>
         </div>
       </nav>
@@ -142,26 +158,9 @@ const App = () => {
             className="form-control"
             placeholder="Search for a course..."
             value={searchTerm}
-            onChange={handleSearchChange} // Handle search input change
+            onChange={handleSearchChange}
           />
         </div>
-        <form onSubmit={handleFormSubmit}>
-          <div className="mb-3 mt-3">
-            <label htmlFor="title" className="form-label" style={{ backgroundColor: '#ffffff' }}>Title</label>
-            <input
-              style={{ backgroundColor: '#F5F5DC' }}
-              type="text"
-              className="form-control"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          {/* Other input fields */}
-          <button type="submit" className="btn btn-primary">Add Course</button>
-        </form>
 
         {loading && <p>Loading courses...</p>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -197,9 +196,15 @@ const App = () => {
                   <td style={{ color: '#000000' }}>{course.rating}</td>
                   <td style={{ color: '#000000' }}>{course.objectives || 'No objectives'}</td>
                   <td>
-                    <button onClick={() => joinCourse(course.title)} className="btn btn-primary">
-                      Join Course
-                    </button>
+                    {course.is_premium ? (
+                      <button onClick={() => joinCourse(course.title)} className="btn btn-primary">
+                        Request Enrollment
+                      </button>
+                    ) : (
+                      <button onClick={() => joinCourse(course.title)} className="btn btn-primary">
+                        Join Course
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))

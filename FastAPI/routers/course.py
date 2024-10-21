@@ -12,13 +12,7 @@ course_router = APIRouter(prefix='/courses', tags=['courses'])
 
 # view by anybody  response_model=Page[CreateCourse]
 @course_router.get('/')
-async def get_courses(current_user:User= Depends(get_current_user)):
-    role = current_user['role']
-    if role != 'admin':
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You are not authorized to update this user's information."
-            )
+async def get_courses():
     courses = all()
     return courses
 
