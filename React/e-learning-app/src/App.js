@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Login from './login';
 import api from './api';
+import './App.css'; // Ensure the styles are aligned with your login menu
 
 const App = () => {
   const [courses, setCourses] = useState([]);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [searchTerm, setSearchTerm] = useState(''); // Search term state
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // Function to decode JWT token and extract user_id
   const parseJwt = (token) => {
     try {
       const base64Url = token.split('.')[1];
@@ -62,10 +62,9 @@ const App = () => {
   };
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value); // Update search term state
+    setSearchTerm(event.target.value);
   };
 
-  // Function to join a course
   const joinCourse = async (title) => {
     console.log('Joining course:', title);
     try {
@@ -86,12 +85,10 @@ const App = () => {
     }
   };
 
-  // Fetch enrolled courses and open them in a new window
   const viewEnrolledCourses = async () => {
     try {
-      const tokenData = parseJwt(token); // Decode the token to get user_id
-      const user_id = tokenData?.user_id; // Extract user_id
-
+      const tokenData = parseJwt(token);
+      const user_id = tokenData?.user_id;
       if (!user_id) {
         alert('Unable to fetch user information.');
         return;
@@ -121,7 +118,6 @@ const App = () => {
     }
   };
 
-  // Filtered courses based on search term
   const filteredCourses = courses.filter(course =>
     course.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -131,58 +127,53 @@ const App = () => {
   }
 
   return (
-    <div>
-      <nav
-        className="navbar"
-        style={{
-          backgroundColor: '#F5F5DC',
-          height: '100px',
-          border: '2px solid #FFFFFF',
-          borderRadius: '5px'
-        }}>
-        <div className="container-fluid navbar">
-          <a
-            className="navbar-brand"
-            href="/"
-            style={{ fontSize: '24px', fontWeight: 'Medium', color: '#000000' }}>
+    <div className="App" style={{ backgroundColor: '#000000', minHeight: '100vh', padding: '20px' }}>
+      <nav className="navbar" style={{ backgroundColor: '#FFFFFF', borderRadius: '5px' }}>
+        <div className="container-fluid">
+          <a className="navbar-brand" href="/" style={{ fontSize: '24px', color: '#3e3193', fontWeight: 'bold' }}>
             E-Learning App
           </a>
-          <button onClick={viewEnrolledCourses} className="btn btn-primary">View Enrolled Courses</button>
-          <button onClick={handleLogout} className="btn btn-danger">Logout</button>
+          <div className="button-group">
+            <button onClick={viewEnrolledCourses} className="btn-purple">
+              View Enrolled Courses
+            </button>
+            <button onClick={handleLogout} className="btn-purple">
+              Logout
+            </button>
+          </div>
         </div>
       </nav>
-      <div className="container">
-        <div className="mb-3 mt-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search for a course..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-        </div>
 
-        {loading && <p>Loading courses...</p>}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+      <div className="container mt-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search for a course..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
 
-        <table className='table table-striped table-bordered table-hover'>
+        {loading && <p style={{ color: '#FFFFFF' }}>Loading courses...</p>}
+        {error && <p className="error" style={{ color: 'red' }}>{error}</p>}
+
+        <table className="table table-striped table-bordered table-hover mt-3">
           <thead>
             <tr style={{ backgroundColor: '#FFFFFF' }}>
-              <th style={{ color: '#101820' }}>Title</th>
-              <th style={{ color: '#101820' }}>Description</th>
-              <th style={{ color: '#101820' }}>Home Page Picture</th>
-              <th style={{ color: '#101820' }}>Is Premium?</th>
-              <th style={{ color: '#101820' }}>Rating</th>
-              <th style={{ color: '#101820' }}>Objectives</th>
-              <th style={{ color: '#101820' }}>Action</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Home Page Picture</th>
+              <th>Is Premium?</th>
+              <th>Rating</th>
+              <th>Objectives</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {filteredCourses.length > 0 ? (
               filteredCourses.map((course, index) => (
-                <tr key={index} style={{ backgroundColor: '#F5F5DC' }}>
-                  <td style={{ color: '#000000' }}>{course.title}</td>
-                  <td style={{ color: '#000000' }}>{course.description}</td>
+                <tr key={index} style={{ backgroundColor: '#FFFFFF' }}>
+                  <td>{course.title}</td>
+                  <td>{course.description}</td>
                   <td>
                     {course.home_page_picture ? (
                       <img
@@ -192,24 +183,30 @@ const App = () => {
                       />
                     ) : 'No Image'}
                   </td>
-                  <td style={{ color: '#000000' }}>{course.is_premium ? 'Yes' : 'No'}</td>
-                  <td style={{ color: '#000000' }}>{course.rating}</td>
-                  <td style={{ color: '#000000' }}>{course.objectives || 'No objectives'}</td>
+                  <td>{course.is_premium ? 'Yes' : 'No'}</td>
+                  <td>{course.rating}</td>
+                  <td>{course.objectives || 'No objectives'}</td>
                   <td>
                     {course.is_premium ? (
-                      <button onClick={() => joinCourse(course.title)} className="btn btn-primary">
+                      <button
+                        onClick={() => joinCourse(course.title)}
+                        className="btn-purple"
+                      >
                         Request Enrollment
                       </button>
                     ) : (
-                      <button onClick={() => joinCourse(course.title)} className="btn btn-primary">
-                        Join Course
+                      <button
+                        onClick={() => joinCourse(course.title)}
+                        className="btn-purple"
+                      >
+                        Join course
                       </button>
                     )}
                   </td>
                 </tr>
               ))
             ) : (
-              <tr>
+              <tr style={{ backgroundColor: '#FFFFFF' }}>
                 <td colSpan="7">No courses available</td>
               </tr>
             )}
