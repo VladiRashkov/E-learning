@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Login from './login';  
+import Login from './login';
 import api from './api';
 
 const App = () => {
@@ -15,16 +15,18 @@ const App = () => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState(''); // New state for search term
 
   const fetchCourses = async () => {
     setLoading(true);
-    setError('');  
+    setError('');
     try {
       const response = await api.get('/courses', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(response.data);  // Add this to log the response
       setCourses(response.data.items || response.data);
     } catch (error) {
       console.error('An error occurred:', error);
@@ -37,6 +39,7 @@ const App = () => {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     if (token) {
@@ -80,31 +83,68 @@ const App = () => {
     localStorage.removeItem('token');
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value); // Update search term state
+  };
+
+  // Function to join a course
+  const joinCourse = async (title) => {
+    console.log('Joining course:', title);
+    try {
+      const response = await api.put('/courses/join_course', null, {
+        params: { title },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('Response:', response);
+      alert(`Successfully joined course: ${title}`);
+    } catch (error) {
+      // console.error('Error joining course:', error);
+      alert('Failed to join the course.');
+    }
+  };
+  
+  
+  // Filtered courses based on search term
+  const filteredCourses = courses.filter(course =>
+    course.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   if (!token) {
     return <Login onLogin={(token) => setToken(token)} />;
   }
 
   return (
     <div>
-      <nav 
-        className="navbar" 
-        style={{ 
-          backgroundColor: '#F5F5DC', 
-          height: '100px', 
+      <nav
+        className="navbar"
+        style={{
+          backgroundColor: '#F5F5DC',
+          height: '100px',
           border: '2px solid #FFFFFF',
-          borderRadius: '5px' 
+          borderRadius: '5px'
         }}>
         <div className="container-fluid navbar">
-          <a 
-            className="navbar-brand" 
-            href="/" 
+          <a
+            className="navbar-brand"
+            href="/"
             style={{ fontSize: '24px', fontWeight: 'Medium', color: '#000000' }}>
             E-Learning App
           </a>
-          <button onClick={handleLogout} className="btn btn-danger" >Logout</button>
+          <button onClick={handleLogout} className="btn btn-danger">Logout</button>
         </div>
       </nav>
       <div className="container">
+        <div className="mb-3 mt-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search for a course..."
+            value={searchTerm}
+            onChange={handleSearchChange} // Handle search input change
+          />
+        </div>
         <form onSubmit={handleFormSubmit}>
           <div className="mb-3 mt-3">
             <label htmlFor="title" className="form-label" style={{ backgroundColor: '#ffffff' }}>Title</label>
@@ -126,7 +166,7 @@ const App = () => {
         {loading && <p>Loading courses...</p>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
 
-        <table className='table table-stripped table-bordered table-hover'>
+        <table className='table table-striped table-bordered table-hover'>
           <thead>
             <tr style={{ backgroundColor: '#FFFFFF' }}>
               <th style={{ color: '#101820' }}>Title</th>
@@ -135,11 +175,12 @@ const App = () => {
               <th style={{ color: '#101820' }}>Is Premium?</th>
               <th style={{ color: '#101820' }}>Rating</th>
               <th style={{ color: '#101820' }}>Objectives</th>
+              <th style={{ color: '#101820' }}>Action</th>
             </tr>
           </thead>
           <tbody>
-            {courses.length > 0 ? (
-              courses.map((course, index) => (
+            {filteredCourses.length > 0 ? (
+              filteredCourses.map((course, index) => (
                 <tr key={index} style={{ backgroundColor: '#F5F5DC' }}>
                   <td style={{ color: '#000000' }}>{course.title}</td>
                   <td style={{ color: '#000000' }}>{course.description}</td>
@@ -155,11 +196,16 @@ const App = () => {
                   <td style={{ color: '#000000' }}>{course.is_premium ? 'Yes' : 'No'}</td>
                   <td style={{ color: '#000000' }}>{course.rating}</td>
                   <td style={{ color: '#000000' }}>{course.objectives || 'No objectives'}</td>
+                  <td>
+                    <button onClick={() => joinCourse(course.title)} className="btn btn-primary">
+                      Join Course
+                    </button>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="6">No courses available</td>
+                <td colSpan="7">No courses available</td>
               </tr>
             )}
           </tbody>

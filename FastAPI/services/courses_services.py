@@ -45,12 +45,35 @@ def make_course(title:str, description:str, home_page_picture:str, is_premium:bo
     return insert_course
 
 
-def request_to_participate(title:str, user_id: int):
-    course_details = query.table('courses').select('*').eq('title',title).execute()
+def request_to_participate(title: str, user_id: int):
+    # Query the course by title
+    course_details = query.table('courses').select('*').eq('title', title).execute()
+    
+    if not course_details.data or len(course_details.data) == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f'Course with title {title} not found'
+        )
+    
+    # Get the course ID
     course_id = course_details.data[0]['course_id']
     
-    result = query.table('enrollments').insert({'student_id':user_id, 'course_id':course_id, 'is_subscribed': True}).execute()
+    # Insert into enrollments
+    result = query.table('enrollments').insert({
+        'student_id': user_id,
+        'course_id': course_id,
+        'is_subscribed': True
+    }).execute()
+    print(result)
+    # Check if the insert operation was successful
+    if result.data[0] == []:  # Assuming 201 means successful insertion
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail='Failed to enroll the user in the course'
+        )
+    
     return True
+
 
 
 def update_course(course_id:int, title: str, description: str, home_page_picture: str, is_premium: bool, rating: float, objectives: str):

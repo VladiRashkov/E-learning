@@ -79,15 +79,19 @@ def modify(title: str, course_data: UpdateCourse, current_user: User = Depends(g
     return {'message': 'Course data updated'}
 
 @course_router.put('/join_course')
-def participate(title:str, user_id:int, current_user: User = Depends(get_current_user)):
-    user_id = current_user['user_id']
+def participate(title: str, current_user: User = Depends(get_current_user)):
+    user_id = current_user['user_id']  # Get user_id from the current user
     if not user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Invalid user data"
         )
+    
+    # Call the function to handle course participation
     request_to_participate(title, user_id)
-    return f'The user has been added to the course {title}'
+    
+    return {'message': f'The user has been added to the course {title}'}
+
     
 @course_router.get('/tag')
 def find_by_course(tag_name:str):
