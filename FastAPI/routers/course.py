@@ -42,7 +42,8 @@ def create_new_course(create_course:CreateCourse, current_user:User = Depends(ge
                          create_course.home_page_picture,
                          create_course.is_premium,
                          create_course.rating,
-                         create_course.objectives)
+                         create_course.objectives,
+                         create_course.link_course)
     
     return result
 
@@ -66,6 +67,7 @@ def modify(title: str, course_data: UpdateCourse, current_user: User = Depends(g
         "home_page_picture": course_data.home_page_picture if course_data.home_page_picture else existing_course[0]["home_page_picture"],
         "is_premium": course_data.is_premium if course_data.is_premium else existing_course[0]["is_premium"],
         "rating": course_data.rating if course_data.rating else existing_course[0]["rating"],
+        "link_course": course_data.link_course if course_data.link_course else existing_course[0]["link_course"],
     }
 
     update_course(**updated_course_data)
