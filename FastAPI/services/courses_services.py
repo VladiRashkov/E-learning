@@ -48,15 +48,16 @@ def make_course(title:str, description:str, home_page_picture:str, is_premium:bo
 def request_to_participate(title: str, user_id: int):
     # Query the course by title
     course_details = query.table('courses').select('*').eq('title', title).execute()
-    
+    course_id = course_details.data[0]['course_id']
     if not course_details.data or len(course_details.data) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f'Course with title {title} not found'
         )
         
+    
     if course_details.data[0]['is_premium'] is True:
-        course_id = course_details.data[0]['course_id']
+        
         result = query.table('enrollments').insert({
         'student_id': user_id,
         'course_id': course_id,

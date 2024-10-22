@@ -11,15 +11,17 @@ class CreateCourse(BaseModel):
     is_premium:bool = False
     rating: float
     objectives:str
+    link_course:str
     
     @classmethod
-    def from_query_result(cls, title: str, description:str, home_page_picture:str, is_premium:bool, rating: float, objectives:str):
+    def from_query_result(cls, title: str, description:str, home_page_picture:str, is_premium:bool, rating: float, objectives:str, link_course:str):
         return cls(title=title,
                    description=description,
                    home_page_picture=home_page_picture,
                    is_premium=is_premium,
                    rating=rating,
-                   objectives=objectives
+                   objectives=objectives,
+                   link_course=link_course
                    )
     
     @classmethod

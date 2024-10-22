@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Login from './login';
 import api from './api';
-import './App.css'; // Ensure the styles are aligned with your login menu
+import './App.css';
 
 const App = () => {
   const [courses, setCourses] = useState([]);
@@ -27,7 +27,7 @@ const App = () => {
     }
   };
 
-  const fetchCourses = async () => {
+  const fetchCourses = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -48,13 +48,13 @@ const App = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     if (token) {
       fetchCourses();
     }
-  }, [token]);
+  }, [token, fetchCourses]);
 
   const handleLogout = () => {
     setToken(null);
@@ -99,19 +99,14 @@ const App = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+
       const enrolledCourses = response.data;
-      const enrolledWindow = window.open('', '_blank');
-      enrolledWindow.document.write('<h1>Enrolled Courses</h1>');
-      enrolledWindow.document.write('<ul>');
-      enrolledCourses.forEach(course => {
-        enrolledWindow.document.write(`
-          <li>
-            <strong>Title:</strong> ${course.title} <br/>
-            <strong>Description:</strong> ${course.description}
-          </li>
-        `);
-      });
-      enrolledWindow.document.write('</ul>');
+      const enrolledWindow = window.open('/enrolled_courses.html', '_blank');
+
+      enrolledWindow.onload = function () {
+        enrolledWindow.enrolledCourses = enrolledCourses;
+      };
+
     } catch (error) {
       console.error('Error fetching enrolled courses:', error);
       alert('Failed to fetch enrolled courses.');

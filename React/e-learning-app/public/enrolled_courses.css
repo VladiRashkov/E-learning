@@ -1,0 +1,113 @@
+/* Enrolled Courses styles */
+.enrolled-courses {
+    background-color: #000000;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box; /* Ensure padding is included in the width/height */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+  }
+  
+  /* Navbar styles */
+  .navbar {
+    background-color: #FFFFFF;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%;
+    box-sizing: border-box; /* Ensure padding is included */
+  }
+  
+  /* Navbar brand */
+  .navbar-brand {
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: bold;
+    color: #3e3193;
+    text-overflow: ellipsis; /* Prevent long text from overflowing */
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .no-courses-message {
+    color: white;  /* Set text color to white */
+    font-size: 24px;  /* Set font size */
+    text-align: center;  /* Center the text */
+    margin-top: 20px;  /* Add some space above the message */
+}
+
+  /* Button group styles */
+  .button-group {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0; /* Prevent buttons from shrinking */
+  }
+  
+  /* Button styles */
+  .btn-purple {
+    background-color: #3e3193;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap; /* Prevent buttons from resizing */
+  }
+  
+  .btn-purple:hover {
+    background-color: #7db300;
+  }
+  
+  /* Course list container */
+  .course-list {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 0 10px; /* Add some padding to prevent edge overflow */
+  }
+  
+  /* List styles */
+  ul {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0; /* Remove padding */
+  }
+  
+  li {
+    background-color: #FFFFFF;
+    margin: 10px 0; /* Space between list items */
+    padding: 10px;
+    border-radius: 5px; /* Rounded corners */
+  }
+  
+  /* Link styles */
+  a {
+    color: #3e3193; /* Link color */
+    text-decoration: none; /* Remove underline */
+  }
+  
+  a:hover {
+    text-decoration: underline; /* Underline on hover */
+  }
+  
+  /* Error message styling */
+  .error {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  /* General responsiveness */
+  @media screen and (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .btn-purple {
+      width: 100%; /* Full width on smaller screens */
+    }
+  }
+  
