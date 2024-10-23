@@ -114,3 +114,5 @@ def rate(email:str, score:float, course_name: str, current_user: User = Depends(
 def average_score(score_id:int):
     result = get_average_score(score_id)
     return f'Course average score {result:.2f} coresult'
+
+
