@@ -101,12 +101,13 @@ const App = () => {
       });
 
       const enrolledCourses = response.data;
+      console.log(enrolledCourses)
       const enrolledWindow = window.open('/enrolled_courses.html', '_blank');
-
-      enrolledWindow.onload = function () {
+      console.log(enrolledWindow)
+      
+      
         enrolledWindow.enrolledCourses = enrolledCourses;
-      };
-
+     
     } catch (error) {
       console.error('Error fetching enrolled courses:', error);
       alert('Failed to fetch enrolled courses.');

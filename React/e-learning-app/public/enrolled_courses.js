@@ -1,33 +1,40 @@
 window.onload = function() {
-  const enrolledCourses = window.opener.enrolledCourses || [];
-  
-  // Get the container element where the course list will be added
+  const enrolledCourses = window.enrolledCourses || [];
+  console.log("Enrolled Courses: ", enrolledCourses);
+
   const courseContainer = document.getElementById('course-list');
-  
-  if (enrolledCourses.length === 0) {
-    // Create a new paragraph element for the message
-    const messageElement = document.createElement('p');
-    messageElement.className = 'no-courses-message'; // Add the CSS class
-    messageElement.textContent = 'No enrolled courses available.'; // Set the message text
-    
-    courseContainer.appendChild(messageElement); // Append the message to the container
+  if (!courseContainer) {
+    console.error('Course container not found.');
     return;
   }
 
-  // Create the list of courses with hyperlinks
+  if (enrolledCourses.length === 0) {
+    const messageElement = document.createElement('p');
+    messageElement.className = 'no-courses-message';
+    messageElement.textContent = 'No enrolled courses available.';
+    courseContainer.appendChild(messageElement);
+    return;
+  }
+
   const ul = document.createElement('ul');
   enrolledCourses.forEach(course => {
+    console.log("Processing course: ", course); 
+
     const li = document.createElement('li');
-    const a = document.createElement('a');
 
-    a.href = `/course.html?id=${course.id}`;  // Assuming course pages are dynamically generated
-    a.textContent = course.title;
-    a.target = '_blank';  // Open the course page in a new tab
+    
+    const titleLink = document.createElement('a');
+    titleLink.href = course.link_course ? course.link_course : `/course.html?course_id=${course.course_id}`;
+    titleLink.textContent = course.title;
+    titleLink.target = '_blank'; 
+    console.log("Title Link URL: ", titleLink.href); 
+    li.appendChild(titleLink); 
 
-    li.appendChild(a);
+   
+    li.appendChild(document.createElement('br'));
+
     ul.appendChild(li);
   });
 
-  // Add the list to the container
   courseContainer.appendChild(ul);
 };

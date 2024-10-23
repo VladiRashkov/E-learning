@@ -11,7 +11,7 @@ class CreateCourse(BaseModel):
     is_premium:bool = False
     rating: float
     objectives:str
-    link_course:str
+    link_course: Optional[str] = None
     
     @classmethod
     def from_query_result(cls, title: str, description:str, home_page_picture:str, is_premium:bool, rating: float, objectives:str, link_course:str):

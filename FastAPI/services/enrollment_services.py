@@ -76,7 +76,8 @@ def courses_enrolled_in(user_id: int):
             home_page_picture=row['home_page_picture'],
             is_premium=row['is_premium'],
             rating=row['rating'],
-            objectives=row['objectives']
+            objectives=row['objectives'],
+            link_course=row['link_course']
         )
         for row in courses.data
     ]
