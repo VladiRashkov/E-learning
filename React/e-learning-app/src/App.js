@@ -9,7 +9,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
   const parseJwt = (token) => {
     try {
       const base64Url = token.split('.')[1];
@@ -76,6 +76,9 @@ const App = () => {
       });
       console.log('Response:', response);
       alert(`Successfully joined course: ${title}`);
+
+      // Update enrolled courses state
+      setEnrolledCourses(prev => [...prev, title]);  // Add the course title to enrolledCourses array
     } catch (error) {
       if (error.response && error.response.status === 307) {
         alert('A request to join the course has been sent for approval.');
@@ -84,6 +87,32 @@ const App = () => {
       }
     }
   };
+
+  const unsubscribeCourse = async (title) => {
+    const emailData = parseJwt(token); // Get user email from token
+    const email = emailData?.email; // Assuming email is stored in token
+
+    if (!email) {
+      alert('Unable to unsubscribe. User email is missing.');
+      return;
+    }
+
+    try {
+      const response = await api.put('users/unsubscribe', null, {
+        params: { email, title },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert(response.data); // Show success message
+      setEnrolledCourses((prev) => prev.filter((course) => course !== title)); // Remove course from enrolled courses state
+    } catch (error) {
+      console.error('Error unsubscribing from course:', error);
+      alert('Failed to unsubscribe from the course.');
+    }
+  };
+
+
 
   const viewEnrolledCourses = async () => {
     try {
@@ -104,10 +133,10 @@ const App = () => {
       console.log(enrolledCourses)
       const enrolledWindow = window.open('/enrolled_courses.html', '_blank');
       console.log(enrolledWindow)
-      
-      
-        enrolledWindow.enrolledCourses = enrolledCourses;
-     
+
+
+      enrolledWindow.enrolledCourses = enrolledCourses;
+
     } catch (error) {
       console.error('Error fetching enrolled courses:', error);
       alert('Failed to fetch enrolled courses.');
@@ -183,22 +212,23 @@ const App = () => {
                   <td>{course.rating}</td>
                   <td>{course.objectives || 'No objectives'}</td>
                   <td>
-                    {course.is_premium ? (
+                    {enrolledCourses.includes(course.title) ? (
                       <button
-                        onClick={() => joinCourse(course.title)}
+                        onClick={() => unsubscribeCourse(course.title)} // Call unsubscribe function
                         className="btn-purple"
                       >
-                        Request Enrollment
+                        Unsubscribe
                       </button>
                     ) : (
                       <button
                         onClick={() => joinCourse(course.title)}
                         className="btn-purple"
                       >
-                        Join course
+                        {course.is_premium ? 'Request Enrollment' : 'Join course'}
                       </button>
                     )}
                   </td>
+
                 </tr>
               ))
             ) : (
