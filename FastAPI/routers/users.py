@@ -120,7 +120,6 @@ def logout(token: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
 
 @users_router.put('/unsubscribe')
 def unsubscribe_course(email:str, title:str, current_user:User = Depends(get_current_user)):
-    
     email_data = current_user['email']
     
     if email != email_data:
