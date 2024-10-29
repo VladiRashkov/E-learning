@@ -7,8 +7,6 @@ from FastAPI.services.section_services import new_section, all_sections_under_co
 
 section_router = APIRouter(prefix='/sections', tags=['sections'])
 
-
-
 @section_router.post('/create')
 def create_section(section:Section, current_user: User = Depends(get_current_user)):
     role = current_user['role']

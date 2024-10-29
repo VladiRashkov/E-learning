@@ -9,7 +9,6 @@ from typing import Optional
 
 course_router = APIRouter(prefix='/courses', tags=['courses'])
 
-
 # view by anybody  response_model=Page[CreateCourse]
 @course_router.get('/')
 async def get_courses():

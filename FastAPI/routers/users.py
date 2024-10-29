@@ -97,9 +97,6 @@ def update_user(email:str, user_data:UpdateUserData, response:Response, current_
         phone_number=user_data.phone_number,
         linkedin_account=user_data.linkedin_account
         )
-    
-    
-    
     return f'User with email address {email} has completed their profile'
 
 

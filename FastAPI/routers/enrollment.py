@@ -4,7 +4,6 @@ from fastapi import Depends
 from FastAPI.data.models.user import User
 from FastAPI.common.auth import get_current_user
 
-
 enrollment_router = APIRouter(prefix='/enroll', tags=['enrollment'])
 
 @enrollment_router.put('/add_user/{user_id}')
