@@ -1,0 +1,13 @@
+FROM node:14-slim
+
+WORKDIR /e-learning-app
+
+COPY ./e-learning-app/package*.json ./
+
+RUN npm install
+
+COPY /e-learning-app ./
+
+EXPOSE 3000
+
+CMD ["npm", "start"]

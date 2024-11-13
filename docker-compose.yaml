@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+
+  frontend:
+    container_name: "frontend"
+    build:
+      context: ./React
+    ports:
+      - "3000:3000"
+
+  backend:
+    container_name: "FastAPI"
+    build:
+      context: ./FastAPI
+    ports:
+      - "8000:8000"
