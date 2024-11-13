@@ -1,7 +1,7 @@
-from FastAPI.data.database import query
+from data.database import query
 from fastapi import HTTPException, status
 from functools import reduce
-from FastAPI.data.models.course import CreateCourse
+from data.models.course import CreateCourse
 
 
 def all():

@@ -1,6 +1,6 @@
-from FastAPI.data.database import query
+from data.database import query
 from fastapi import HTTPException, status
-from FastAPI.data.models.course import CreateCourse
+from data.models.course import CreateCourse
 
 
 #admin or teacher confirmation to be implemented

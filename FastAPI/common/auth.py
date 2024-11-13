@@ -2,7 +2,7 @@ from fastapi import Depends, status, HTTPException, Response
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
-from FastAPI.services.users_services import get_user_by_id
+from services.users_services import get_user_by_id
 from pydantic import BaseModel
 import bcrypt
 

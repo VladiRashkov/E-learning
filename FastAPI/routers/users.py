@@ -1,18 +1,18 @@
 from fastapi import APIRouter, Response, status, HTTPException, Header, Depends
-from FastAPI.data.models.user import LoginData, UpdateUserData, User, CreateUserData
-from FastAPI.data.database import query
-from FastAPI.services.users_services import all, \
+from data.models.user import LoginData, UpdateUserData, User, CreateUserData
+from data.database import query
+from services.users_services import all, \
 completed_account, get_user_by_id, verify_user_credentials, \
 remove_from_course, changing_password, discover_user
-from FastAPI.services.admin_services import save_role_change_request
+from services.admin_services import save_role_change_request
 from fastapi.requests import Request
 import re
-from FastAPI.common.auth import create_token, get_current_user, verify_access_token, logout_user, bearer_scheme
+from common.auth import create_token, get_current_user, verify_access_token, logout_user, bearer_scheme
 from fastapi.security import HTTPAuthorizationCredentials
 from typing import Optional
-from FastAPI.data.schemas import ChangePassword
+from data.schemas import ChangePassword
 from fastapi_pagination import Page, add_pagination, paginate
-from FastAPI.services.users_services import hash_password
+from services.users_services import hash_password
 
 users_router = APIRouter(prefix='/users', tags = ['users'])
 

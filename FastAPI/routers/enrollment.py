@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, status
-from FastAPI.services.enrollment_services import enroll_in_course, part_of_courses, courses_enrolled_in
+from services.enrollment_services import enroll_in_course, part_of_courses, courses_enrolled_in
 from fastapi import Depends
-from FastAPI.data.models.user import User
-from FastAPI.common.auth import get_current_user
+from data.models.user import User
+from common.auth import get_current_user
 
 enrollment_router = APIRouter(prefix='/enroll', tags=['enrollment'])
 

@@ -1,7 +1,7 @@
-from FastAPI.data.database import query
+from data.database import query
 from fastapi import HTTPException, status
 import bcrypt
-from FastAPI.data.models.user import User
+from data.models.user import User
 
 
 def all():

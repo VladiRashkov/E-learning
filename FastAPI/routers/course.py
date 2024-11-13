@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, Query, HTTPException, status
-from FastAPI.services.courses_services import all, make_course, request_to_participate, \
+from services.courses_services import all, make_course, request_to_participate, \
     update_course, discover_course, find_course_by_tag, rate_course, get_average_score
-from FastAPI.data.models.user import User, UserRole
-from FastAPI.data.models.course import CreateCourse, UpdateCourse
-from FastAPI.common.auth import get_current_user
+from data.models.user import User, UserRole
+from data.models.course import CreateCourse, UpdateCourse
+from common.auth import get_current_user
 from fastapi_pagination import Page, add_pagination, paginate
 from typing import Optional
 
