@@ -1,0 +1,46 @@
+{
+  "email": "admin@е-learning.com",
+  "password": "Adminy1234!"
+}
+
+
+{
+  "email": "einstein@yahoo.com",
+  "password": "Crazy1234!"
+}
+
+{
+  "email": "stevie@gmail.com",
+  "password": "Sarem123!"
+}
+wrong password
+
+{
+  "email": "james@gmail.com",
+  "password": "Stringit1234!"
+}
+
+
+{
+  "email": "konate@gmail.com",
+  "password": "Konate1234!"
+}
+
+{
+  "email": "rsalem@hotmail.com",
+  "password": "Rsalem1234!3"
+}
+
+{
+  "email": "lenny@hotmail.com",
+  "password": "Lenny1234!3"
+}
+
+{
+  "email": "james@hotmail.com",
+  "password": "James1234!3"
+}
+
+uvicorn FastAPI.main:app --reload
+
+docker-compose up --build
